@@ -1,0 +1,13 @@
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    font-family: 'Bungee Shade', cursive;
+    font-size: clamp(32px, 10dvw, 46px);
+    color: white;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    line-height: 0;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.28));
+}
