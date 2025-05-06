@@ -4,7 +4,7 @@ import Main from './pages/main/Main';
 import Gallery from './pages/gallery/Gallery';
 
 function App() {
-  return (
+    return (
     <>
       <Routes>
         <Route path="/" element={<Main />} />

@@ -10,14 +10,9 @@ import img7 from "@/assets/stockImages/sourced-co-wedding-stock-photos-12.jpg";
 import img8 from "@/assets/stockImages/wedding-1183270_640.jpg";
 import closeImg from '@/assets/icons/close.svg';
 import downloadImg from '@/assets/icons/download.svg';
-import arrowUp from '../../assets/icons/arrow.svg';
-import arrowDown from '../../assets/icons/arrow-down.svg';
-
-interface IPic {
-  id: number
-  src: string,
-  uploadTime: Date
-}
+import arrowUp from '@/assets/icons/arrow.svg';
+import arrowDown from '@/assets/icons/arrow-down.svg';
+import type { IPic } from '@/interfaces/pic.interface';
 
 const Gallery = () => {
   const [images, setImages] = useState<IPic[]>([]);

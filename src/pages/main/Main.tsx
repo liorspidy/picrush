@@ -7,20 +7,20 @@ import { useEffect, useState } from 'react';
 import Header from '../../components/header/Header';
 
 const Main = () => {
-    const [images , setImages] = useState([img1, img2, img3]);
-    const [currentImage , setCurrentImage] = useState(images[0]);
+    const [bgImages , setBgImages] = useState([img1, img2, img3]);
+    const [currentImage , setCurrentImage] = useState(bgImages[0]);
 
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentImage((prevImage) => {
-                const currentIndex = images.indexOf(prevImage);
-                const nextIndex = (currentIndex + 1) % images.length;
-                return images[nextIndex];
+                const currentIndex = bgImages.indexOf(prevImage);
+                const nextIndex = (currentIndex + 1) % bgImages.length;
+                return bgImages[nextIndex];
             });
         }, 5000); // Change image every 5 seconds
 
         return () => clearInterval(interval);
-    }, [images]);
+    }, [bgImages]);
 
     return (
         <>
