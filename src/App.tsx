@@ -1,14 +1,17 @@
-import './App.css'
-import Header from './components/header/Header'
-import Main from './pages/Main'
+import { Routes, Route } from 'react-router-dom';
+import './App.css';
+import Main from './pages/main/Main';
+import Gallery from './pages/gallery/Gallery';
 
 function App() {
   return (
     <>
-      <Header />
-      <Main />
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/gallery" element={<Gallery />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
