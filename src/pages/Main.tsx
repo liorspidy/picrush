@@ -25,6 +25,7 @@ const Main = () => {
         <main className={classes.main}>
             <div className={classes.bgImageWrapper} style={{ '--bgImage': `url(${currentImage})` } as React.CSSProperties}>
                 <img className={classes.mainImage} src={currentImage} alt='background image' />
+            </div>
 
                 <div className={classes.overlay}>
                     <div className={classes.textWrapper}>
@@ -33,7 +34,6 @@ const Main = () => {
                     </div>
                     <Actions />
                 </div>
-            </div>
         </main>
     )
 }
