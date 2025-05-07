@@ -29,15 +29,17 @@ const Main = () => {
         <>
             <Header />
             <main className={classes.main}>
-                {<Loader />}
+                {isLoading && <Loader />}
                 <div className={classes.bgImageWrapper} style={{ '--bgImage': `url(${currentImage})` } as React.CSSProperties}>
                     <img className={classes.mainImage} src={currentImage} alt='background image' />
                 </div>
 
                     <div className={classes.overlay}>
                         <div className={classes.textWrapper}>
-                            <h1 className={`${classes.mainTitle} ${classes.strip}`}>{`Netanela \u00A0&\u00A0 Lior`}</h1>
-                            <p className={`${classes.mainDate} ${classes.strip}`}>02/02/2026</p>
+                            <div className={classes.content}>
+                                <h1 className={classes.mainTitle}>{`Netanela \u00A0&\u00A0 Lior`}</h1>
+                                <p className={classes.mainDate}>02/02/2026</p>
+                            </div>
                         </div>
                         <Actions />
                     </div>

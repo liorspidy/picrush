@@ -45,40 +45,47 @@
 
 
         .textWrapper {
-            color: white;
             text-align: center;
             display: flex;
             flex-direction: column;
-            gap: 24px;
             width: 100%;
             height: 100%;
             align-items: center;
             justify-content: center;
-            color: black;
             position: relative;
-    
-            .strip {
-                width: 100%;
+
+
+            .content {
+                color:#282828;
                 background-color: rgba(255, 255, 255, 0.577);
-                margin: 0 auto;
-                padding: 8px;
+                padding: 24px;
                 filter: drop-shadow(0 0 5px rgba(73, 73, 73, 0.35));
                 position: absolute;
+                bottom: 30px;
+                border-radius: 20px;
+                width: calc(100% - 48px);
+
+                .mainTitle {
+                    margin: 0;
+                    font-size: 11dvw;
+                    font-weight: 700;
+                    font-family: "Great Vibes";
+                    padding-block-end: 8px;
+                }
+        
+                .mainDate {
+                    margin: 0;
+                    font-size: 36px;
+                    font-weight: 400;
+                    font-family: "Cormorant Garamond";
+                    border-top: 1px solid #282828;
+                    width: fit-content;
+                    margin: 0 auto;
+                    padding-block-start: 8px;
+                    padding-inline: 12px;
+                }
             }
     
-            .mainTitle {
-                font-size: 12dvw;
-                font-weight: 700;
-                font-family: "Great Vibes";
-                bottom: 160px;
-            }
-    
-            .mainDate {
-                font-size: 48px;
-                font-weight: 400;
-                font-family: "Cormorant Garamond";
-                bottom: 60px;
-            }
         }
     }
 
@@ -93,18 +100,17 @@
         }
 
         .overlay {
-            
             .textWrapper {
-                .strip {
-                    width: fit-content;
-                }
+                .content {
+                    width: 500px;
 
-                .mainTitle {
-                    font-size: clamp(2rem, 5vw, 4rem);
-                }
-    
-                .mainDate {
-                    font-size: clamp(1rem, 5vw, 3rem);
+                    .mainTitle {
+                        font-size: clamp(2.5rem, 5dvw, 4rem);
+                    }
+        
+                    .mainDate {
+                        font-size: clamp(1.5rem, 5dvw, 3rem);
+                    }
                 }
             }
         }

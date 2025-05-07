@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import classes from './Actions.module.scss';
-import cameraIcon from '../../assets/icons/camera-icon.svg';
-import galleryIcon from '../../assets/icons/gallery-icon.svg';
+import cameraIcon from '@/assets/icons/camera-icon.svg';
+import uploadIcon from '@/assets/icons/upload.svg';
+import galleryIcon from '@/assets/icons/gallery-icon.svg';
 import { Link } from 'react-router-dom';
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -10,10 +11,15 @@ import toast from 'react-hot-toast';
 
 const Actions = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { db, storage, setIsLoading} = useFirebaseContext();
 
-  const cameraHandler = () => {
+  const cameraBtnHandler = () => {
     inputRef.current?.click();
+  };
+
+  const uploadBtnHandler = () => {
+    fileInputRef.current?.click();
   };
 
   const addImageToDb = async (file: File) => {
@@ -46,7 +52,7 @@ const Actions = () => {
     }
   };
 
-  const handleCapture = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       await addImageToDb(file);
@@ -55,26 +61,39 @@ const Actions = () => {
 
   return (
     <div className={classes.actions}>
-      <Link to="/gallery" className={classes.circle}>
+      <div className={classes.imagesLeft}>
+        <p className={classes.text}><span className={classes.value}>20</span> Pictures Left</p>
+      </div>
+
+      <div className={classes.actionsWrapper}>
+        <Link to="/gallery" className={classes.circle}>
         <img className={classes.icon} src={galleryIcon} alt="gallery icon" />
-      </Link>
+        </Link>
 
-      <button className={classes.btn} onClick={cameraHandler}>
+        <button className={classes.btn} onClick={cameraBtnHandler}>
         <img className={classes.icon} src={cameraIcon} alt="camera icon" />
-      </button>
+        </button>
 
-      <input
+        <input
         type="file"
         accept="image/*"
         capture="environment"
         style={{ display: 'none' }}
         ref={inputRef}
-        onChange={handleCapture}
-      />
+        onChange={handleInput}
+        />
 
-      <div className={`${classes.circle} ${classes.imagesLeft}`}>
-        <span className={classes.number}>20</span>
-        <span className={classes.text}>Left</span>
+        <button className={classes.btn} onClick={uploadBtnHandler}>
+        <img className={classes.icon} src={uploadIcon} alt="upload icon" />
+        </button>
+
+        <input
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        ref={fileInputRef}
+        onChange={handleInput}
+        />
       </div>
     </div>
   );
