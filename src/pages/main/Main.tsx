@@ -5,10 +5,13 @@ import img3 from "@/assets/images/img3.jpeg";
 import Actions from '../../components/actions/Actions';
 import { useEffect, useState } from 'react';
 import Header from '../../components/header/Header';
+import Loader from '@/components/loader/Loader';
+import { useFirebaseContext } from '@/hooks/useFirebase';
 
 const Main = () => {
     const [bgImages , setBgImages] = useState([img1, img2, img3]);
     const [currentImage , setCurrentImage] = useState(bgImages[0]);
+    const { isLoading } = useFirebaseContext();
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -26,6 +29,7 @@ const Main = () => {
         <>
             <Header />
             <main className={classes.main}>
+                {<Loader />}
                 <div className={classes.bgImageWrapper} style={{ '--bgImage': `url(${currentImage})` } as React.CSSProperties}>
                     <img className={classes.mainImage} src={currentImage} alt='background image' />
                 </div>

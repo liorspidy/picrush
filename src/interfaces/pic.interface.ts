@@ -1,5 +1,5 @@
 export interface IPic {
-    id: number
-    src: string,
+    id?: string | number
+    src : string,
     uploadTime: Date
 }
