@@ -8,6 +8,7 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useFirebaseContext } from '@/hooks/useFirebase';
 import toast from 'react-hot-toast';
+import imageCompression from 'browser-image-compression';
 
 const Actions = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -25,32 +26,35 @@ const Actions = () => {
   const addImageToDb = async (file: File) => {
     try {
       setIsLoading(true);
-      // Sanitize filename and create storage path
-      const safeFileName = file.name.replace(/[^\w.]+/g, "_");
+  
+      // Compress image
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 2,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      });
+  
+      const safeFileName = compressedFile.name.replace(/[^\w.]+/g, "_");
       const filePath = `images/${Date.now()}_${safeFileName}`;
       const storageRef = ref(storage, filePath);
-
-      // Upload file to Firebase Storage
-      const uploadResult = await uploadBytes(storageRef, file);
-
-      // Get public URL
+  
+      const uploadResult = await uploadBytes(storageRef, compressedFile);
       const downloadURL = await getDownloadURL(uploadResult.ref);
-
-      // Save metadata to Firestore
+  
       const imageMetadata = {
         src: downloadURL,
         uploadTime: serverTimestamp(),
       };
-
-      const docRef = await addDoc(collection(db, "images"), imageMetadata);
+  
+      await addDoc(collection(db, "images"), imageMetadata);
       setIsLoading(false);
-
-      toast.success("התמונה נוספה בהצלחה!");
+  
+      toast.success("Got it! Added to the gallery.");
     } catch (err) {
-      toast.error('קרתה שגיאה - אנא נסו שנית');
+      toast.error('Error - pleas try again later');
       console.error("❌ Upload failed:", err);
     }
-  };
+  };  
 
   const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -62,7 +66,8 @@ const Actions = () => {
   return (
     <div className={classes.actions}>
       <div className={classes.imagesLeft}>
-        <p className={classes.text}><span className={classes.value}>20</span> Pictures Left</p>
+        <p className={classes.text}><span className={classes.value}>20</span> Uploades Left</p>
+        {/* <progress /> */}
       </div>
 
       <div className={classes.actionsWrapper}>

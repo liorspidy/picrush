@@ -15,7 +15,6 @@ function App() {
         style: { 
           fontFamily: 'sans-serif', 
           marginTop: '86px',
-          direction: 'rtl'
         } 
       }} 
       />
