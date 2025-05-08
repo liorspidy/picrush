@@ -157,25 +157,30 @@ const Gallery = () => {
   return (
     <div className={classes.gallery}>
       {isLoading && <Loader />}
-      {currentPicture && 
-        <ImageOverlay 
-          images={images} 
-          currentPicture={currentPicture} 
+      {currentPicture && (
+        <ImageOverlay
+          images={images}
+          currentPicture={currentPicture}
           setCurrentPicture={setCurrentPicture}
           currentPictureIndex={currentPictureIndex}
           setCurrentPictureIndex={setCurrentPictureIndex}
           touchStartX={touchStartX}
           isAddSwipeAnimation={isAddSwipeAnimation}
           setIsAddSwipeAnimation={setIsAddSwipeAnimation}
-      />}
+        />
+      )}
 
       <div className={classes.headerActions}>
-        <button className={`${classes.btn} ${classes.refresh}`} type="button" onClick={refreshHandler}>
-          <img className={classes.icon} src={refreshIcon} alt="back" />
+        <button
+          className={`${classes.btn} ${classes.refresh}`}
+          type="button"
+          onClick={refreshHandler}
+        >
+          <img className={classes.icon} src={refreshIcon} alt="back" loading="lazy" />
         </button>
 
-        <Link to={'/'} className={`${classes.btn} ${classes.back}`}>
-          <img className={classes.icon} src={arrowRight} alt="back" />
+        <Link to={"/"} className={`${classes.btn} ${classes.back}`}>
+          <img className={classes.icon} src={arrowRight} alt="back" loading="lazy"/>
         </Link>
       </div>
 
@@ -185,29 +190,44 @@ const Gallery = () => {
       </div>
 
       <div className={classes.subActions}>
-        <button type="button" className={classes.sortBy} onClick={switchSortingHandler}>
+        <button
+          type="button"
+          className={classes.sortBy}
+          onClick={switchSortingHandler}
+        >
           <p className={classes.text}>sort by:</p>
           <div className={classes.sortMethod}>
             <img
-            className={classes.icon}
-            src={sortingMethod === 1 ? arrowDown : arrowUp}
-            alt="sorting method"
-            aria-label={sortingMethod === 1 ? 'descending' : 'ascending'}
+              className={classes.icon}
+              src={sortingMethod === 1 ? arrowDown : arrowUp}
+              alt="sorting method"
+              loading="lazy"
+              aria-label={sortingMethod === 1 ? "descending" : "ascending"}
             />
           </div>
         </button>
 
-        <button type="button" className={classes.showMe} onClick={switchShowMeHandler}>
+        <button
+          type="button"
+          className={classes.showMe}
+          onClick={switchShowMeHandler}
+        >
           <p className={classes.text}>show me:</p>
           <span className={classes.showMethod}>
-            {isUserBased ? 'only me' : 'all'}
+            {isUserBased ? "only me" : "all"}
           </span>
         </button>
       </div>
 
-      <div className={classes.imagesGrid}>
-        {imagesGrid}
-      </div>
+      {filteredImages.length > 0 && (
+        <div className={classes.imagesGrid}>{imagesGrid}</div>
+      )}
+
+      {filteredImages.length == 0 && (
+        <div className={classes.noData}>
+          <p>No Images Here Yet...</p>
+        </div>
+      )}
     </div>
   );
 };
