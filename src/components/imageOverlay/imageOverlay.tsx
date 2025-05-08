@@ -3,8 +3,10 @@ import classes from "./imageOverlay.module.scss";
 import closeImg from "@/assets/icons/close.svg";
 import downloadImg from "@/assets/icons/download.svg";
 import arrowPrevNext from "@/assets/icons/arrow-prev-next.svg";
-import swiperIcon from '@/assets/icons/swipe-finger.svg';
+import swiperIcon from "@/assets/icons/swipe-finger.svg";
 import { useState } from "react";
+import { useFirebaseContext } from "@/hooks/useFirebase";
+import { getDownloadURL, getStorage, ref } from "firebase/storage";
 
 interface ImageOverlayProps {
   images: IPic[];
@@ -24,10 +26,11 @@ const ImageOverlay = ({
   currentPictureIndex,
   setCurrentPictureIndex,
   touchStartX,
-  isAddSwipeAnimation, 
-  setIsAddSwipeAnimation
+  isAddSwipeAnimation,
+  setIsAddSwipeAnimation,
 }: ImageOverlayProps) => {
-  const [test,setTest] = useState<string>('');
+  const [test, setTest] = useState<string>('');
+  const { storage } = useFirebaseContext();
 
   const closePictureHandler = () => {
     setCurrentPicture(null);
@@ -46,7 +49,7 @@ const ImageOverlay = ({
   };
 
   const setNextImage = () => {
-      if (currentPictureIndex !== null) {
+    if (currentPictureIndex !== null) {
       if (currentPictureIndex < images.length - 1) {
         setCurrentPicture(images[currentPictureIndex + 1]);
         setCurrentPictureIndex(currentPictureIndex + 1);
@@ -66,56 +69,50 @@ const ImageOverlay = ({
     const touchDifference = touchStartX.current - touchEndX;
 
     if (currentPictureIndex !== null) {
-    // swipe left
       if (touchDifference > 50) {
         setPrevImage();
-    // swipe right
       } else if (touchDifference < -50) {
         setNextImage();
       }
     }
 
     setIsAddSwipeAnimation(false);
-    localStorage.setItem('swiper','false');
+    localStorage.setItem("swiper", "false");
   };
 
   const prevImageHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
-    setPrevImage()
+    e.stopPropagation();
+    setPrevImage();
   };
 
   const nextImageHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
-    setNextImage()
+    e.stopPropagation();
+    setNextImage();
   };
-
 
   const downloadHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    if (!currentPicture) return;
+    if (!currentPicture || !currentPicture.path) {
+      console.error("Missing currentPicture or path.");
+      return;
+    }
 
     try {
-      const response = await fetch(currentPicture.src);
-      if (!response.ok) {
-        throw new Error("Failed to fetch the image.");
-      }
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      
+      const fileRef = ref(storage, currentPicture.path);
+      const url = await getDownloadURL(fileRef);
+  
+      // Create a temporary anchor element
       const anchor = document.createElement("a");
       anchor.href = url;
-      anchor.download = `img-${Date.now()}`;
+      anchor.download = `image-${Date.now()}.jpg`;  
       document.body.appendChild(anchor);
-      // anchor.click();
+      anchor.click();
       document.body.removeChild(anchor);
-
-      setTest('yey');
-      URL.revokeObjectURL(url);
-
+  
+      setTest("Download triggered.");
     } catch (error) {
+      console.error("Error getting download URL:", error);
       setTest(String(error));
-      console.error("Error downloading the image:", error);
     }
   };
 
@@ -135,7 +132,9 @@ const ImageOverlay = ({
           >
             <img className={classes.icon} src={closeImg} alt="close image" />
           </button>
-    <pre style={{position: 'relative', color: 'black' , zIndex:'10'}}>{test}</pre>
+          {/* <pre style={{ position: "relative", color: "black", zIndex: "10" }}>
+            {test}
+          </pre> */}
           <button
             type="button"
             className={classes.btn}
@@ -155,9 +154,15 @@ const ImageOverlay = ({
             e.stopPropagation();
           }}
         >
-          {isAddSwipeAnimation && <div className={classes.swiperHelperWrapper}>
-            <img className={classes.icon} src={swiperIcon}  alt="swiper icon helper" />
-          </div>}
+          {isAddSwipeAnimation && (
+            <div className={classes.swiperHelperWrapper}>
+              <img
+                className={classes.icon}
+                src={swiperIcon}
+                alt="swiper icon helper"
+              />
+            </div>
+          )}
 
           <img
             className={classes.currentPic}
@@ -195,6 +200,9 @@ const ImageOverlay = ({
             style={{ rotate: "180deg" }}
           />
         </button>
+
+        {/* 🔽 Hidden download anchor for programmatic click */}
+        <a id="myimg" style={{ display: "none" }} />
       </div>
     </div>
   );

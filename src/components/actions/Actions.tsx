@@ -69,6 +69,7 @@ const Actions = () => {
       // Store metadata in Firestore
       const imageMetadata: IPic = {
         src: downloadURL,
+        path: filePath,
         uploadTime: serverTimestamp(),
         userId,
         width: imageDimensions.width,

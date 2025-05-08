@@ -49,8 +49,9 @@ const Gallery = () => {
           imagesArray.push({
             userId: data.userId || userId,
             src: data.src,
+            path: data.path,
             uploadTime: new Date(data.uploadTime?.seconds * 1000 || Date.now()),
-            width: data.width || 0, 
+            width: data.width || 0,
             height: data.height || 0,
           });
         });
@@ -63,6 +64,7 @@ const Gallery = () => {
         imagesArray.push({
           userId: data.userId || 'unknown',
           src: data.src,
+          path: data.path,
           uploadTime: new Date(data.uploadTime?.seconds * 1000 || Date.now()),
           width: data.width || 0,
           height: data.height || 0,
