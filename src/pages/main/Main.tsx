@@ -1,7 +1,4 @@
 import classes from './Main.module.scss';
-import img1 from "@/assets/images/img1.jpeg";
-import img2 from "@/assets/images/img2.jpeg";
-import img3 from "@/assets/images/img3.jpeg";
 import Actions from '../../components/actions/Actions';
 import { useEffect, useState } from 'react';
 import Header from '../../components/header/Header';
@@ -9,13 +6,12 @@ import Loader from '@/components/loader/Loader';
 import { useFirebaseContext } from '@/hooks/useFirebase';
 
 const Main = () => {
-    const [bgImages , setBgImages] = useState([img1, img2, img3]);
-    const [currentImage , setCurrentImage] = useState(bgImages[0]);
-    const { isLoading } = useFirebaseContext();
+    const { isLoading, bgImages } = useFirebaseContext();
+    const [currentImage , setCurrentImage] = useState<string>(bgImages[0]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentImage((prevImage) => {
+            setCurrentImage((prevImage: string) => {
                 const currentIndex = bgImages.indexOf(prevImage);
                 const nextIndex = (currentIndex + 1) % bgImages.length;
                 return bgImages[nextIndex];
