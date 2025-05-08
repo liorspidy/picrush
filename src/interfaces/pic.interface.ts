@@ -1,5 +1,9 @@
+import type firebase from "firebase/compat/app"
+
 export interface IPic {
-    id?: string | number
+    userId: string | null
     src : string,
-    uploadTime: Date
+    uploadTime: Date | firebase.firestore.FieldValue
+    width: number,
+    height: number
 }

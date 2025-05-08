@@ -1,44 +1,27 @@
 .gallery {
-    .backdrop {
-        background-color: rgba(0, 0, 0, 0.823);
-        position: fixed;
-        inset: 0;
-        display: grid;
-        place-items: center;
-        z-index: 2;
+    .headerActions {
+        display: flex;
+        gap: 16px;
+        justify-content: flex-end;
+        padding: 12px;
 
-        .actions {
+        .btn {
+            width: 46px;
+            height: 46px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            position: absolute;
-            left: 10px;
-            top: 10px;
+            border-radius: 50%;
+            border: none;
+            background-color: transparent;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            align-self: flex-end;
+            padding: 8px;
+            cursor: pointer;
 
-            .btn {
-                padding: 5px;
-                background-color: white;
-                border: none;
-                width: 50px;
-                height: 50px;
-                cursor: pointer;
-                border-radius: 50%;
-                z-index: 5;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-    
-                .icon {
-                    height: 100%;
-                }
+            &.refresh {
+                padding: 4px;
             }
-        }
 
-        .currentPicWrapper {
-            width: 100%;
-
-            .currentPic {
+            .icon {
                 width: 100%;
                 height: 100%;
                 object-fit: contain;
@@ -57,7 +40,7 @@
         justify-content: center;
         color: black;
         position: relative;
-        padding-block: 46px 16px;
+        padding-block: 16px;
 
         .mainTitle {
             font-size: 42px;
@@ -76,14 +59,21 @@
 
     .imagesGrid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4px;
+        padding-inline: 4px;
 
         .imageBtn {
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
             background: transparent;
             border: none;
             padding: 0;
             width: 100%;
             height: 100%;
+            aspect-ratio: 1 / 1;
+
             .image {
                 width: 100%;
                 height: 100%;
@@ -92,49 +82,84 @@
         }
     }
 
-    .sortBy {
-        padding: 0 6px;
+    .subActions {
         display: flex;
+        gap: 16px;
         justify-content: center;
         align-items: center;
-        gap: 8px;
-        font-family: 'Poppins', sans-serif;
+        margin-block: 4px 12px;
+        margin-inline: auto;
 
-        .text {
-            font-size: 18px;
+        .sortBy {
+            padding: 0 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+            background-color: transparent;
+            cursor: pointer;
+            border: none;
+    
+            .text {
+                font-size: 18px;
+                margin-block: 0;
+            }
+    
+            .sortMethod {
+                width: 30px;
+                height: 30px;
+                padding: 0;
+    
+                .icon {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    display: inline-block;
+                }
+            }
         }
 
-        .sortMethod {
+        .showMe {
+            padding: 0 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
             background-color: transparent;
-            border: none;
-            width: 30px;
-            height: 30px;
-            padding: 0;
             cursor: pointer;
-
-            .icon {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                display: inline-block;
+            border: none;
+            font-size: 18px;
+    
+            .text {
+                margin-block: 0;
+            }
+    
+            .showMethod {
+                font-weight: 700;
+                text-wrap: nowrap;
             }
         }
     }
+
 }
 
 @media screen and (min-width: 768px) {
     .gallery {
-        .backdrop {
-            .currentPicWrapper {
-                height: 100dvh;
-                width: auto;
-    
-                .currentPic {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: contain;
+        .headerActions {
+            .btn {
+                width: 36px;
+                height: 36px;
+
+                &:hover {
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
                 }
             }
         }
+
+        .imagesGrid {
+            grid-template-columns: repeat(6,1fr);
+        }    
     }
 }

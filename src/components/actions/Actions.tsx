@@ -9,18 +9,27 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useFirebaseContext } from '@/hooks/useFirebase';
 import toast from 'react-hot-toast';
 import imageCompression from 'browser-image-compression';
+import type { IPic } from '@/interfaces/pic.interface';
 
 const Actions = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { db, storage, setIsLoading} = useFirebaseContext();
+  const { db, storage, setIsLoading, userId, val, setVal} = useFirebaseContext();
+
+  const btnHandler = (ref: React.RefObject<HTMLInputElement | null>) => {
+    if(val !== 20){
+      ref.current?.click();
+    } else {
+      toast.error('No Uploades Left')
+    }
+  }
 
   const cameraBtnHandler = () => {
-    inputRef.current?.click();
+    btnHandler(inputRef);
   };
 
   const uploadBtnHandler = () => {
-    fileInputRef.current?.click();
+    btnHandler(fileInputRef)
   };
 
   const addImageToDb = async (file: File) => {
@@ -34,25 +43,51 @@ const Actions = () => {
         useWebWorker: true,
       });
   
-      const safeFileName = compressedFile.name.replace(/[^\w.]+/g, "_");
-      const filePath = `images/${Date.now()}_${safeFileName}`;
+      // Load compressed image into <img> to extract width & height
+      const imageDimensions = await new Promise<{ width: number; height: number }>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          resolve({ width: img.width, height: img.height });
+        };
+        img.onerror = reject;
+  
+        // Create object URL for the blob
+        const objectUrl = URL.createObjectURL(compressedFile);
+        img.src = objectUrl;
+      });
+  
+      // Create clean filename and path
+      const safeFileName = file.name.replace(/[^\w.]+/g, "_");
+      const timestamp = Date.now();
+      const filePath = `images/${userId}/${timestamp}_${safeFileName}`;
       const storageRef = ref(storage, filePath);
   
-      const uploadResult = await uploadBytes(storageRef, compressedFile);
-      const downloadURL = await getDownloadURL(uploadResult.ref);
+      // Upload image
+      await uploadBytes(storageRef, compressedFile);
+      const downloadURL = await getDownloadURL(storageRef);
   
-      const imageMetadata = {
+      // Store metadata in Firestore
+      const imageMetadata: IPic = {
         src: downloadURL,
         uploadTime: serverTimestamp(),
+        userId,
+        width: imageDimensions.width,
+        height: imageDimensions.height,
       };
   
-      await addDoc(collection(db, "images"), imageMetadata);
-      setIsLoading(false);
+      await addDoc(collection(db, `images/${userId}/userImages`), imageMetadata);
+  
+      // Update counter
+      const currentVal = val + 1;
+      localStorage.setItem("val", currentVal.toString());
+      setVal(currentVal);
   
       toast.success("Got it! Added to the gallery.");
     } catch (err) {
-      toast.error('Error - pleas try again later');
-      console.error("❌ Upload failed:", err);
+      toast.error("Error - please try again later");
+      console.error("Upload failed:", err);
+    } finally {
+      setIsLoading(false);
     }
   };  
 
@@ -61,21 +96,16 @@ const Actions = () => {
     if (file) {
       await addImageToDb(file);
     }
-  };
+  }
 
   return (
     <div className={classes.actions}>
-      <div className={classes.imagesLeft}>
-        <p className={classes.text}><span className={classes.value}>20</span> Uploades Left</p>
-        {/* <progress /> */}
-      </div>
-
       <div className={classes.actionsWrapper}>
         <Link to="/gallery" className={classes.circle}>
         <img className={classes.icon} src={galleryIcon} alt="gallery icon" />
         </Link>
 
-        <button className={classes.btn} onClick={cameraBtnHandler}>
+        <button type="button" className={classes.btn} onClick={cameraBtnHandler}>
         <img className={classes.icon} src={cameraIcon} alt="camera icon" />
         </button>
 
@@ -88,7 +118,7 @@ const Actions = () => {
         onChange={handleInput}
         />
 
-        <button className={classes.btn} onClick={uploadBtnHandler}>
+        <button type="button" className={classes.btn} onClick={uploadBtnHandler}>
         <img className={classes.icon} src={uploadIcon} alt="upload icon" />
         </button>
 

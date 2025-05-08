@@ -3,8 +3,31 @@ import './App.css';
 import Main from './pages/main/Main';
 import Gallery from './pages/gallery/Gallery';
 import { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
+import { useFirebaseContext } from './hooks/useFirebase';
 
 function App() {
+  const { setUserId, setVal} = useFirebaseContext();
+
+  useEffect(() => {
+    // setting up userId
+    const lsId = localStorage.getItem('id');
+    const randId = Math.floor((Math.random()* 999999999999)).toString();
+    const id = lsId ? lsId : randId;
+    setUserId(id);
+    if(!lsId) {
+      localStorage.setItem('id', id);
+    }
+
+    // setting up uploads left
+    const lsval = localStorage.getItem('val');
+    const val = lsval ? +lsval : 0;
+    setVal(val);
+    if(!lsval){
+      localStorage.setItem('val', '0');
+    }
+  },[])
+
   return (
     <>
       <Toaster 
@@ -14,7 +37,8 @@ function App() {
         position: 'top-center',
         style: { 
           fontFamily: 'sans-serif', 
-          marginTop: '86px',
+          position: 'relative',
+          top: '150px'
         } 
       }} 
       />
