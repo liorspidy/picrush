@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import classes from './Header.module.scss';
 import { useFirebaseContext } from '@/hooks/useFirebase';
 
 const Header = () => {
-  const { val } = useFirebaseContext();
-  const [maxVal, setMaxVal] = useState<number>(20);
+  const { val , maxVal} = useFirebaseContext();
 
   return (
     <header className={classes.header}>

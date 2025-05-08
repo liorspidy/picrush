@@ -4,10 +4,8 @@ import closeImg from "@/assets/icons/close.svg";
 import downloadImg from "@/assets/icons/download.svg";
 import arrowPrevNext from "@/assets/icons/arrow-prev-next.svg";
 import swiperIcon from "@/assets/icons/swipe-finger.svg";
-import { useState } from "react";
 import { useFirebaseContext } from "@/hooks/useFirebase";
-import { getDownloadURL, getStorage, ref } from "firebase/storage";
-
+import Loader from "../loader/Loader";
 interface ImageOverlayProps {
   images: IPic[];
   currentPicture: IPic | null;
@@ -29,8 +27,8 @@ const ImageOverlay = ({
   isAddSwipeAnimation,
   setIsAddSwipeAnimation,
 }: ImageOverlayProps) => {
-  const [test, setTest] = useState<string>('');
-  const { storage } = useFirebaseContext();
+
+  const { isLoading , setIsLoading} = useFirebaseContext();
 
   const closePictureHandler = () => {
     setCurrentPicture(null);
@@ -38,6 +36,7 @@ const ImageOverlay = ({
 
   const setPrevImage = () => {
     if (currentPictureIndex !== null) {
+      setIsLoading(true);
       if (currentPictureIndex > 0) {
         setCurrentPicture(images[currentPictureIndex - 1]);
         setCurrentPictureIndex(currentPictureIndex - 1);
@@ -50,6 +49,7 @@ const ImageOverlay = ({
 
   const setNextImage = () => {
     if (currentPictureIndex !== null) {
+      setIsLoading(true);
       if (currentPictureIndex < images.length - 1) {
         setCurrentPicture(images[currentPictureIndex + 1]);
         setCurrentPictureIndex(currentPictureIndex + 1);
@@ -96,28 +96,35 @@ const ImageOverlay = ({
       console.error("Missing currentPicture or path.");
       return;
     }
-
-    try {
-      const fileRef = ref(storage, currentPicture.path);
-      const url = await getDownloadURL(fileRef);
   
-      // Create a temporary anchor element
+    try {
+      setIsLoading(true);
+      const response = await fetch(currentPicture.src);
+      if (!response.ok) throw new Error("Failed to fetch image blob");
+
+      // Create a blob URL and trigger download
+      const blob = await response.blob();
+      const blobURL = URL.createObjectURL(blob);
+
       const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = `image-${Date.now()}.jpg`;  
+      anchor.href = blobURL;
+      anchor.download = `image-${Date.now()}.jpg`;
       document.body.appendChild(anchor);
       anchor.click();
       document.body.removeChild(anchor);
-  
-      setTest("Download triggered.");
+      URL.revokeObjectURL(blobURL);
+      
     } catch (error) {
-      console.error("Error getting download URL:", error);
-      setTest(String(error));
+      console.error("Error downloading image:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+  
 
   return (
     <div className={classes.imageOverlay}>
+      {isLoading && <Loader />}
       <div
         className={classes.backdrop}
         onClick={closePictureHandler}
@@ -130,11 +137,13 @@ const ImageOverlay = ({
             className={classes.btn}
             onClick={closePictureHandler}
           >
-            <img className={classes.icon} src={closeImg} alt="close image" />
+            <img 
+            className={classes.icon} 
+            src={closeImg} 
+            alt="close image"
+            loading="lazy"
+            />
           </button>
-          {/* <pre style={{ position: "relative", color: "black", zIndex: "10" }}>
-            {test}
-          </pre> */}
           <button
             type="button"
             className={classes.btn}
@@ -144,6 +153,7 @@ const ImageOverlay = ({
               className={classes.icon}
               src={downloadImg}
               alt="download image"
+              loading="lazy"
             />
           </button>
         </div>
@@ -160,6 +170,7 @@ const ImageOverlay = ({
                 className={classes.icon}
                 src={swiperIcon}
                 alt="swiper icon helper"
+                loading="lazy"
               />
             </div>
           )}
@@ -172,6 +183,10 @@ const ImageOverlay = ({
             style={{ filter: "blur(10px)", transition: "filter 0.3s ease" }}
             onLoad={(e) => {
               e.currentTarget.style.filter = "none";
+              setIsLoading(false)
+            }}
+            onError={() => {
+              setIsLoading(false);
             }}
           />
         </div>
@@ -200,9 +215,6 @@ const ImageOverlay = ({
             style={{ rotate: "180deg" }}
           />
         </button>
-
-        {/* 🔽 Hidden download anchor for programmatic click */}
-        <a id="myimg" style={{ display: "none" }} />
       </div>
     </div>
   );

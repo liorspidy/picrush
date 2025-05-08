@@ -13,6 +13,8 @@ interface FirebaseContextProps {
   setUserId: (value: string | null) => void;
   val: number;
   setVal: (value: number) => void
+  maxVal: number;
+  setMaxVal: (value: number) => void
 }
 
 export const FirebaseContext = createContext<FirebaseContextProps | undefined>(undefined);
@@ -21,6 +23,7 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
   const [val, setVal] = useState<number>(0);
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [maxVal, setMaxVal] = useState<number>(20);
 
   return (
     <FirebaseContext.Provider
@@ -33,6 +36,8 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
         setUserId,
         val,
         setVal,
+        maxVal, 
+        setMaxVal
       }}
     >
       {children}

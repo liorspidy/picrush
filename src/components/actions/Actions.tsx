@@ -14,10 +14,10 @@ import type { IPic } from '@/interfaces/pic.interface';
 const Actions = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { db, storage, setIsLoading, userId, val, setVal} = useFirebaseContext();
+  const { db, storage, setIsLoading, userId, val, setVal, maxVal} = useFirebaseContext();
 
   const btnHandler = (ref: React.RefObject<HTMLInputElement | null>) => {
-    if(val !== 20){
+    if(val !== maxVal){
       ref.current?.click();
     } else {
       toast.error('No Uploades Left')
