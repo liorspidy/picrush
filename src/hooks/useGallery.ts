@@ -143,9 +143,9 @@ const useGallery = () => {
       await Promise.all(tasks);
       const currVal = localStorage.getItem("val");
       if (currVal && +currVal > 0) {
-        const newVal = +currVal - 1;
+        const newVal = Math.max(0, +currVal - pictures.length);
         localStorage.setItem("val", newVal.toString());
-        setVal(val - 1);
+        setVal(newVal);
       }
 
       const newImages = filteredImages.filter((img) => !pictures.some((p) => p.path === img.path));
