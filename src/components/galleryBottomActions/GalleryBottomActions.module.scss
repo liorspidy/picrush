@@ -6,12 +6,12 @@
     text-align: center;
     z-index: 5;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 24px;
     pointer-events: none;
     width: 100%;
-    padding: 20px;
+    padding: 24px;
 
     .btn {
         font-family: 'Poppins', sans-serif;
@@ -19,18 +19,54 @@
         background-color: white;
         border: none;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
-        border-radius: 8px;
-        padding: 12px;
+        border-radius: 12px;
+        padding: 10px;
         font-weight: 600;
         animation: showBtn 0.3s forwards ease-in-out;
         text-wrap: nowrap;
         flex: 1;
         pointer-events: all;
         max-width: 50%;
+    }
 
-        &.removeAll {
-            background-color: rgb(203, 29, 29);
-            color: white;
+    .roundBtnsWrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+
+        .roundBtn {
+            font-family: 'Poppins', sans-serif;
+            background-color: white;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+            border-radius: 50%;
+            animation: showBtn 0.3s forwards ease-in-out;
+            text-wrap: nowrap;
+            pointer-events: all;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 50px;
+            height: 50px;
+            padding: 10px;
+
+            &.removeAll {
+                background-color: rgb(172, 0, 0);
+            }
+            
+            &.shareViaWhatsapp {
+                background-color: green;
+            }
+            
+            .icon {
+                filter: grayscale(1) brightness(0) invert(1);
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
         }
     }
+
 }
