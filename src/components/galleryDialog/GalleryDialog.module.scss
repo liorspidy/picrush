@@ -1,0 +1,64 @@
+.popup {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    max-width: 90dvw;
+    transform: translate(-50%,-50%);
+    border-radius: 24px;
+    background-color: white;
+    padding: 24px;
+    text-align: center;
+    z-index: 10;
+    animation: showDialog 0.2s ease-in forwards;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+
+    .content {
+        font-size: 16px;
+        font-weight: 600;
+        margin-block-start: 0;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+
+        .actionBtn {
+            border-radius: 18px;
+            padding: 16px;
+            flex: 1;
+            font-size: 18px;
+            border: 2px solid #1C274C;
+
+            &.decline {
+                border: 2px solid #1C274C;
+                background: transparent;
+
+                .text{
+                    color: #1C274C;
+                    font-weight: 600;
+                }
+            }
+
+            &.accept {
+                background-color: #1C274C;
+                .text{
+                    color: white;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+}
+
+@keyframes showDialog {
+    0% {
+        opacity: 0;
+    }
+
+    100%{
+        opacity: 1;
+    }
+}

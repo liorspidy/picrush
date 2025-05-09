@@ -4,33 +4,50 @@ import closeImg from "@/assets/icons/close.svg";
 import downloadImg from "@/assets/icons/download.svg";
 import arrowPrevNext from "@/assets/icons/arrow-prev-next.svg";
 import swiperIcon from "@/assets/icons/swipe-finger.svg";
+import trashIcon from "@/assets/icons/trash.svg";
 import { useFirebaseContext } from "@/hooks/useFirebase";
 import Loader from "../loader/Loader";
+import GalleryDialog from "../galleryDialog/GalleryDialog";
+import { useRef } from "react";
 interface ImageOverlayProps {
-  images: IPic[];
+  filteredImages: IPic[];
+  setFilteredImages: React.Dispatch<React.SetStateAction<IPic[]>>;
+  userId: string | null;
   currentPicture: IPic | null;
   setCurrentPicture: React.Dispatch<React.SetStateAction<IPic | null>>;
   currentPictureIndex: number | null;
   setCurrentPictureIndex: React.Dispatch<React.SetStateAction<number | null>>;
-  touchStartX: React.RefObject<number>;
   isAddSwipeAnimation: boolean;
   setIsAddSwipeAnimation: React.Dispatch<React.SetStateAction<boolean>>;
+  isPopupOpen: boolean;
+  setIsPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isRemoving: boolean;
+  setIsRemoving: React.Dispatch<React.SetStateAction<boolean>>;
+  removeImagesFromFirebase: (pictures: IPic[]) => void
 }
 
 const ImageOverlay = ({
-  images,
+  filteredImages,
+  setFilteredImages,
+  userId,
   currentPicture,
   setCurrentPicture,
   currentPictureIndex,
   setCurrentPictureIndex,
-  touchStartX,
   isAddSwipeAnimation,
   setIsAddSwipeAnimation,
-}: ImageOverlayProps) => {
-
+  isPopupOpen,
+  setIsPopupOpen,
+  isRemoving,
+  setIsRemoving,
+  removeImagesFromFirebase
+}: ImageOverlayProps) => {  
   const { isLoading , setIsLoading} = useFirebaseContext();
+  const touchStartX = useRef<number>(0);
 
   const closePictureHandler = () => {
+    setIsRemoving(false)
+    setIsPopupOpen(false);
     setCurrentPicture(null);
   };
 
@@ -38,11 +55,11 @@ const ImageOverlay = ({
     if (currentPictureIndex !== null) {
       setIsLoading(true);
       if (currentPictureIndex > 0) {
-        setCurrentPicture(images[currentPictureIndex - 1]);
+        setCurrentPicture(filteredImages[currentPictureIndex - 1]);
         setCurrentPictureIndex(currentPictureIndex - 1);
       } else if (currentPictureIndex === 0) {
-        setCurrentPicture(images[images.length - 1]);
-        setCurrentPictureIndex(images.length - 1);
+        setCurrentPicture(filteredImages[filteredImages.length - 1]);
+        setCurrentPictureIndex(filteredImages.length - 1);
       }
     }
   };
@@ -50,45 +67,80 @@ const ImageOverlay = ({
   const setNextImage = () => {
     if (currentPictureIndex !== null) {
       setIsLoading(true);
-      if (currentPictureIndex < images.length - 1) {
-        setCurrentPicture(images[currentPictureIndex + 1]);
+      if (currentPictureIndex < filteredImages.length - 1) {
+        setCurrentPicture(filteredImages[currentPictureIndex + 1]);
         setCurrentPictureIndex(currentPictureIndex + 1);
-      } else if (currentPictureIndex === images.length - 1) {
-        setCurrentPicture(images[0]);
+      } else if (currentPictureIndex === filteredImages.length - 1) {
+        setCurrentPicture(filteredImages[0]);
         setCurrentPictureIndex(0);
       }
     }
   };
 
   const onTouchStartHandler = (event: React.TouchEvent) => {
-    touchStartX.current = event.touches[0].clientX;
+    if(filteredImages.length > 1) {
+      touchStartX.current = event.touches[0].clientX;
+    }
   };
 
   const onTouchEndHandler = (event: React.TouchEvent) => {
-    const touchEndX = event.changedTouches[0].clientX;
-    const touchDifference = touchStartX.current - touchEndX;
-
-    if (currentPictureIndex !== null) {
-      if (touchDifference > 50) {
-        setPrevImage();
-      } else if (touchDifference < -50) {
-        setNextImage();
+    if(filteredImages.length > 1) {
+      const touchEndX = event.changedTouches[0].clientX;
+      const touchDifference = touchStartX.current - touchEndX;
+  
+      if (currentPictureIndex !== null) {
+        if (touchDifference > 50) {
+          setPrevImage();
+        } else if (touchDifference < -50) {
+          setNextImage();
+        }
       }
+  
+      removeIsAddSwiper();
     }
+  };
 
+  const removeIsAddSwiper = () => {
     setIsAddSwipeAnimation(false);
     localStorage.setItem("swiper", "false");
-  };
+  }
 
   const prevImageHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setPrevImage();
+    if(filteredImages.length > 1) {
+      setPrevImage();
+    }
   };
 
   const nextImageHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setNextImage();
+    if(filteredImages.length > 1) {
+      setNextImage();
+    }
   };
+
+  const removeHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsRemoving(true);
+    if(!isPopupOpen){
+      setIsPopupOpen(true);
+    }
+  }
+
+  const acceptRemoving = () => {
+    if(isRemoving) {
+      const newImages = filteredImages.filter((img) => img !== currentPicture);
+      setFilteredImages(newImages);
+      if(currentPicture) {
+        removeImagesFromFirebase([currentPicture])
+      }
+    }
+    closePictureHandler()
+  }
+
+  const declineRemoving = () => {
+    setIsRemoving(false);
+  }
 
   const downloadHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -144,6 +196,7 @@ const ImageOverlay = ({
             loading="lazy"
             />
           </button>
+
           <button
             type="button"
             className={classes.btn}
@@ -156,6 +209,20 @@ const ImageOverlay = ({
               loading="lazy"
             />
           </button>
+
+         {currentPicture?.userId === userId && 
+         <button
+            type="button"
+            className={classes.btn}
+            onClick={removeHandler}
+          >
+            <img
+              className={classes.icon}
+              src={trashIcon}
+              alt="remove image"
+              loading="lazy"
+            />
+          </button>}
         </div>
 
         <div
@@ -166,12 +233,17 @@ const ImageOverlay = ({
         >
           {isAddSwipeAnimation && (
             <div className={classes.swiperHelperWrapper}>
-              <img
-                className={classes.icon}
-                src={swiperIcon}
-                alt="swiper icon helper"
-                loading="lazy"
-              />
+              <div className={classes.iconWeapper}>
+                <img
+                  className={classes.icon}
+                  src={swiperIcon}
+                  alt="swiper icon helper"
+                  loading="lazy"
+                />
+              </div>
+              <p className={classes.info}>
+                Swipe right or left to see more
+              </p>
             </div>
           )}
 
@@ -185,7 +257,8 @@ const ImageOverlay = ({
               e.currentTarget.style.filter = "none";
               setIsLoading(false)
             }}
-            onError={() => {
+            onError={(error) => {
+              console.error('Error rendering the image:',error)
               setIsLoading(false);
             }}
           />
@@ -216,6 +289,13 @@ const ImageOverlay = ({
           />
         </button>
       </div>
+
+      {isPopupOpen && <GalleryDialog 
+        message="Are you sure you want to delete this image?" 
+        confirmAction={acceptRemoving}
+        cancelAction={declineRemoving}
+        setIsPopupOpen={setIsPopupOpen}
+        />}
     </div>
   );
 };
