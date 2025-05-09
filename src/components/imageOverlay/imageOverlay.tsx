@@ -11,7 +11,6 @@ import GalleryDialog from "../galleryDialog/GalleryDialog";
 import { useRef } from "react";
 interface ImageOverlayProps {
   filteredImages: IPic[];
-  setFilteredImages: React.Dispatch<React.SetStateAction<IPic[]>>;
   userId: string | null;
   currentPicture: IPic | null;
   setCurrentPicture: React.Dispatch<React.SetStateAction<IPic | null>>;
@@ -28,7 +27,6 @@ interface ImageOverlayProps {
 
 const ImageOverlay = ({
   filteredImages,
-  setFilteredImages,
   userId,
   currentPicture,
   setCurrentPicture,
@@ -128,12 +126,8 @@ const ImageOverlay = ({
   }
 
   const acceptRemoving = () => {
-    if(isRemoving) {
-      const newImages = filteredImages.filter((img) => img !== currentPicture);
-      setFilteredImages(newImages);
-      if(currentPicture) {
+    if(isRemoving && currentPicture) {
         removeImagesFromFirebase([currentPicture])
-      }
     }
     closePictureHandler()
   }

@@ -7,7 +7,7 @@ interface GallerySubActionsProps {
   setSortingMethod: React.Dispatch<React.SetStateAction<number>>;
   isUserBased: boolean;
   setIsUserBased: React.Dispatch<React.SetStateAction<boolean>>;
-  deselectAllHandler: () => void
+  deselectAllHandler: () => void;
 }
 
 const GallerySubActions = ({
@@ -15,7 +15,7 @@ const GallerySubActions = ({
   setSortingMethod,
   setIsUserBased,
   isUserBased,
-  deselectAllHandler
+  deselectAllHandler,
 }: GallerySubActionsProps) => {
   // switchs the sorting method
   const switchSortingHandler = () => {
