@@ -5,10 +5,12 @@ import downloadImg from "@/assets/icons/download.svg";
 import arrowPrevNext from "@/assets/icons/arrow-prev-next.svg";
 import swiperIcon from "@/assets/icons/swipe-finger.svg";
 import trashIcon from "@/assets/icons/trash.svg";
+import shareIcon from "@/assets/icons/share.svg";
 import { useFirebaseContext } from "@/hooks/useFirebase";
 import Loader from "../loader/Loader";
 import GalleryDialog from "../galleryDialog/GalleryDialog";
 import { useRef } from "react";
+import { shortenUrls } from "@/tools/shortenUrls";
 interface ImageOverlayProps {
   filteredImages: IPic[];
   userId: string | null;
@@ -22,7 +24,7 @@ interface ImageOverlayProps {
   setIsPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isRemoving: boolean;
   setIsRemoving: React.Dispatch<React.SetStateAction<boolean>>;
-  removeImagesFromFirebase: (pictures: IPic[]) => void
+  removeImagesFromFirebase: (pictures: IPic[]) => void;
 }
 
 const ImageOverlay = ({
@@ -167,6 +169,18 @@ const ImageOverlay = ({
     }
   };
   
+    const shareHandler = async () => {
+      if (!currentPicture) return;
+    
+      setIsLoading(true);
+      const shortUrls = await shortenUrls([currentPicture.src]);
+    
+      const message = `Here are my photos from the wedding, shared with you via Picrush 💕\n\n${shortUrls.join("\n")}`;
+      const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      setIsLoading(false);
+  
+      window.open(whatsappURL, "_blank");
+    };
 
   return (
     <div className={classes.imageOverlay}>
@@ -203,6 +217,19 @@ const ImageOverlay = ({
               loading="lazy"
             />
           </button>
+
+          <button
+          type="button"
+          className={classes.btn}
+          onClick={shareHandler}
+        >
+          <img
+            className={classes.icon}
+            src={shareIcon}
+            alt="share via whatsapp"
+            loading="lazy"
+          />
+        </button>
 
          {currentPicture?.userId === userId && 
          <button

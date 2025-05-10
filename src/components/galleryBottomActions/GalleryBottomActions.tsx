@@ -43,7 +43,6 @@ const GalleryBottomActions = ({
     window.open(whatsappURL, "_blank");
   };
   
-
   const downloadAllHandler = async () => {
     if (pickedImages.length === 0) return;
     setIsLoading(true);
@@ -83,6 +82,7 @@ const GalleryBottomActions = ({
             className={classes.icon}
             src={shareIcon}
             alt="share via whatsapp"
+            loading="lazy"
           />
         </button>
 
@@ -95,6 +95,7 @@ const GalleryBottomActions = ({
             className={classes.icon}
             src={downloadImg}
             alt="download all images"
+            loading="lazy"
           />
         </button>
 
@@ -104,7 +105,7 @@ const GalleryBottomActions = ({
             className={`${classes.roundBtn} ${classes.removeAll}`}
             onClick={removeAllHandler}
           >
-            <img className={classes.icon} src={trashIcon} alt="remove images" />
+            <img className={classes.icon} src={trashIcon} alt="remove images" loading="lazy" />
           </button>
         )}
       </div>
