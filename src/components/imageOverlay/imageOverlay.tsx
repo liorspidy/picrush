@@ -170,7 +170,8 @@ const ImageOverlay = ({
     }
   };
   
-  const shareHandler = async () => {
+  const shareHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     if (!currentPicture) return;
   
     setIsLoading(true);
