@@ -13,7 +13,7 @@ interface GalleryBottomActionsProps {
   setIsPopupOpen: React.Dispatch<SetStateAction<boolean>>;
   setIsRemoving: React.Dispatch<SetStateAction<boolean>>;
   pickedImages: IPic[];
-  setIsLoading: React.Dispatch<SetStateAction<boolean>>;
+  setIsLoading: (value: boolean) => void;
 }
 
 const GalleryBottomActions = ({
@@ -29,13 +29,12 @@ const GalleryBottomActions = ({
     setIsRemoving(true);
   };
 
-  
-  
   const shareHandler = async () => {
     if (pickedImages.length === 0) return;
   
     const urls = pickedImages.map(img => img.src);
-    const shortUrls = await shortenUrls(urls,setIsLoading);
+    setIsLoading(true);
+    const shortUrls = await shortenUrls(urls);
   
     const message = `Here are my photos from the wedding, shared with you via Picrush 💕\n\n${shortUrls.join("\n")}`;
     const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;

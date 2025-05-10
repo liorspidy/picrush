@@ -6,7 +6,7 @@ import { useFirebaseContext } from "./useFirebase";
 
 const useGallery = () => {
   const swiperAnimationRef = useRef(false);
-  const { db, storage, userId, isLoading, setIsLoading, val, setVal } = useFirebaseContext();
+  const { db, storage, userId, isLoading, setIsLoading, setVal } = useFirebaseContext();
   const [images, setImages] = useState<IPic[]>([]);
   const [filteredImages, setFilteredImages] = useState<IPic[]>([]);
   const [currentPicture, setCurrentPicture] = useState<IPic | null>(null);

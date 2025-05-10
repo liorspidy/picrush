@@ -1,7 +1,4 @@
-import type { SetStateAction } from "react";
-
-export const shortenUrls = async (urls: string[], setIsLoading: React.Dispatch<SetStateAction<boolean>>): Promise<string[]> => {
-    setIsLoading(true);
+export const shortenUrls = async (urls: string[]): Promise<string[]> => {
     const shortened: string[] = [];
   
     for (const url of urls) {
