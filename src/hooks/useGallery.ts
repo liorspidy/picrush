@@ -184,6 +184,7 @@ const useGallery = () => {
     pickImageHandler,
     removeImagesFromFirebase,
     isLoading,
+    setIsLoading,
     userId,
     setFilteredImages
   };

@@ -37,6 +37,7 @@ const Gallery = () => {
     pickImageHandler,
     removeImagesFromFirebase,
     isLoading,
+    setIsLoading,
     userId
   } = useGallery();
 
@@ -180,6 +181,8 @@ const Gallery = () => {
         deselectAllHandler={deselectAllHandler} 
         setIsPopupOpen={setIsPopupOpen} 
         setIsRemoving={setIsRemoving}  
+        pickedImages={pickedImages}
+        setIsLoading={setIsLoading}
         />
         }
     </div>
