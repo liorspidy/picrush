@@ -13,7 +13,7 @@ interface GalleryBottomActionsProps {
   setIsPopupOpen: React.Dispatch<SetStateAction<boolean>>;
   setIsRemoving: React.Dispatch<SetStateAction<boolean>>;
   pickedImages: IPic[];
-  setIsLoading: (value: boolean) => void;
+  setIsLoading: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const GalleryBottomActions = ({

@@ -1,5 +1,5 @@
 // src/firebase/firebase.context.tsx
-import { createContext, useState, type ReactNode } from "react";
+import { createContext, useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { db, storage } from "./firebase.config";
 import type { Firestore } from "firebase/firestore";
 import type { FirebaseStorage } from "firebase/storage";
@@ -10,13 +10,13 @@ interface FirebaseContextProps {
   db: Firestore;
   storage: FirebaseStorage;
   isLoading: boolean;
-  setIsLoading: (value: boolean) => void;
+  setIsLoading: Dispatch<SetStateAction<boolean>>; 
   userId: string | null;
-  setUserId: (value: string | null) => void;
+  setUserId: Dispatch<SetStateAction<string | null>>;
   val: number;
-  setVal: (value: number) => void
+  setVal: Dispatch<SetStateAction<number>>;          
   maxVal: number;
-  setMaxVal: (value: number) => void
+  setMaxVal: Dispatch<SetStateAction<number>>;       
   bgImages: string[];
 }
 
