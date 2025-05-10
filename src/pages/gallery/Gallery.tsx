@@ -148,7 +148,9 @@ const Gallery = () => {
         />
       )}
 
-      <GalleryHeaderActions />
+      <GalleryHeaderActions 
+        setIsPicking={setIsPicking}
+      />
 
       <div className={classes.textWrapper}>
         <h1 className={classes.mainTitle}>{`Netanela \u00A0&\u00A0 Lior`}</h1>
@@ -164,7 +166,7 @@ const Gallery = () => {
       />
 
       {filteredImages.length > 0 && (
-        <div className={`${classes.imagesGrid} ${pickedImages.length > 0 ? classes.picking : null}`}>
+        <div className={`${classes.imagesGrid} ${isPicking ? classes.picking : null}`}>
           {imagesGrid}
         </div>
       )}

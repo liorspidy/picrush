@@ -5,6 +5,22 @@
     padding: 12px;
 
     .btn {
+        font-family: "Poppins", sans-serif;
+        font-size: 20px;
+        background-color: white;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        animation: showBtn 0.3s forwards ease-in-out;
+        text-wrap: nowrap;
+        pointer-events: all;
+        max-width: 50%;
+        margin-inline-end: auto;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        padding: 4px 12px;
+    }
+
+    .roundBtn {
         width: 46px;
         height: 46px;
         display: flex;

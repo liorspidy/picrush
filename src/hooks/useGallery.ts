@@ -81,7 +81,7 @@ const useGallery = () => {
   }, [filteredImages]);
 
   const pictureHandler = useCallback((picture: IPic) => {
-    if (isPicking && pickedImages.length > 0) {
+    if (isPicking) {
       setPickedImages(prev =>
         prev.some(img => img === picture)
           ? prev.filter(img => img !== picture)
@@ -92,7 +92,7 @@ const useGallery = () => {
       const index = filteredImages.findIndex(img => img === picture);
       setCurrentPictureIndex(index);
     }
-  }, [filteredImages, isPicking, pickedImages]);
+  }, [filteredImages, isPicking]);
 
   useEffect(() => {
     if (pickedImages.length === 0) {
