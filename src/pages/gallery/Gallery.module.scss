@@ -32,6 +32,7 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 4px;
         padding-inline: 4px;
+        padding-bottom: 40px;
 
         &.picking {
             .isPicked {

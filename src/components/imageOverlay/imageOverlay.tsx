@@ -11,6 +11,7 @@ import Loader from "../loader/Loader";
 import GalleryDialog from "../galleryDialog/GalleryDialog";
 import { useRef } from "react";
 import { shortenUrls } from "@/tools/shortenUrls";
+
 interface ImageOverlayProps {
   filteredImages: IPic[];
   userId: string | null;
@@ -169,18 +170,43 @@ const ImageOverlay = ({
     }
   };
   
-    const shareHandler = async () => {
-      if (!currentPicture) return;
-    
-      setIsLoading(true);
-      const shortUrls = await shortenUrls([currentPicture.src]);
-    
-      const message = `Here are my photos from the wedding, shared with you via Picrush 💕\n\n${shortUrls.join("\n")}`;
-      const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
-      setIsLoading(false);
+  const shareHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (!currentPicture) return;
   
-      window.open(whatsappURL, "_blank");
-    };
+    try {
+      setIsLoading(true);
+  
+      // Fetch image and create file
+      const response = await fetch(currentPicture.src);
+      if (!response.ok) throw new Error("Failed to fetch image");
+  
+      const blob = await response.blob();
+      const file = new File([blob], 'picrush-photo.jpg', { type: blob.type });
+  
+      // Try native file sharing
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+        });
+      } else {
+        throw new Error("Native share not supported");
+      }
+    } catch (error) {
+      console.warn("Native share failed, using WhatsApp fallback:", error);
+  
+      try {
+        const shortUrls = await shortenUrls([currentPicture.src]);
+        const message = `Here’s a memory from the wedding, shared with you via Picrush 💕\n\n${shortUrls[0]}`;
+        const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        window.open(whatsappURL, "_blank");
+      } catch (fallbackError) {
+        console.error("Fallback to WhatsApp failed:", fallbackError);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className={classes.imageOverlay}>

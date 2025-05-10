@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
+import fs from 'fs'
 
 export default defineConfig({
   base: '/',
@@ -45,12 +46,19 @@ export default defineConfig({
             purpose: 'any maskable',
           }
         ]
+      },
+      devOptions: {
+        enabled: true
       }
     })
   ],
   server: {
-    host: '0.0.0.0',
+    host: '192.168.1.191',
     port: 3000,
+    https: {
+      key: fs.readFileSync('./192.168.1.191-key.pem'),
+      cert: fs.readFileSync('./192.168.1.191.pem'),
+    },
     strictPort: true
   }
 })

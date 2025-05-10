@@ -3,7 +3,6 @@ import classes from "./GalleryBottomActions.module.scss";
 import trashIcon from "@/assets/icons/trash.svg";
 import shareIcon from "@/assets/icons/share.svg";
 import downloadImg from "@/assets/icons/download.svg";
-
 import type { IPic } from "@/interfaces/pic.interface";
 import { shortenUrls } from "@/tools/shortenUrls";
 
@@ -31,17 +30,45 @@ const GalleryBottomActions = ({
 
   const shareHandler = async () => {
     if (pickedImages.length === 0) return;
-  
-    const urls = pickedImages.map(img => img.src);
     setIsLoading(true);
-    const shortUrls = await shortenUrls(urls);
   
-    const message = `Here are my photos from the wedding, shared with you via Picrush 💕\n\n${shortUrls.join("\n")}`;
-    const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    setIsLoading(false);
-
-    window.open(whatsappURL, "_blank");
-  };
+    try {
+      // Step 1: Try native file sharing
+      const files: File[] = [];
+  
+      for (const image of pickedImages) {
+        const response = await fetch(image.src);
+        if (!response.ok) throw new Error("Failed to fetch image");
+        const blob = await response.blob();
+        const file = new File([blob], 'picrush-photo.jpg', { type: blob.type });
+        files.push(file);
+      }
+  
+      // Step 2: Check for native support
+      if (navigator.canShare && navigator.canShare({ files })) {
+        await navigator.share({
+          files,
+        });
+      } else {
+        throw new Error("Native share not supported");
+      }
+  
+    } catch (error) {
+      console.warn("Native share failed or not supported, using WhatsApp fallback:", error);
+  
+      try {
+        const urls = pickedImages.map(img => img.src);
+        const shortUrls = await shortenUrls(urls);
+        const message = `Here are my photos from the wedding, shared with you via Picrush 💕\n\n${shortUrls.join("\n")}`;
+        const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        window.open(whatsappURL, "_blank");
+      } catch (linkError) {
+        console.error("Fallback to WhatsApp also failed:", linkError);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };  
   
   const downloadAllHandler = async () => {
     if (pickedImages.length === 0) return;
