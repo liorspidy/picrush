@@ -5,6 +5,7 @@ import shareIcon from "@/assets/icons/share.svg";
 import downloadImg from "@/assets/icons/download.svg";
 
 import type { IPic } from "@/interfaces/pic.interface";
+import { shortenUrls } from "@/tools/shortenUrls";
 
 interface GalleryBottomActionsProps {
   allowRemoving: boolean;
@@ -28,44 +29,13 @@ const GalleryBottomActions = ({
     setIsRemoving(true);
   };
 
-  const shortenUrls = async (urls: string[]): Promise<string[]> => {
-    setIsLoading(true);
-    const shortened: string[] = [];
   
-    for (const url of urls) {
-      try {
-        const formData = new URLSearchParams();
-        formData.append("url", url);
-  
-        const response = await fetch("https://spoo.me/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "application/json",
-          },
-          body: formData.toString(),
-        });
-  
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-  
-        const data = await response.json();
-        shortened.push(data.short_url);
-      } catch (error) {
-        console.error("Shorten failed", error);
-        shortened.push(url);
-      }
-    }
-  
-    return shortened;
-  };
   
   const shareHandler = async () => {
     if (pickedImages.length === 0) return;
   
     const urls = pickedImages.map(img => img.src);
-    const shortUrls = await shortenUrls(urls);
+    const shortUrls = await shortenUrls(urls,setIsLoading);
   
     const message = `Here are my photos from the wedding, shared with you via Picrush 💕\n\n${shortUrls.join("\n")}`;
     const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
