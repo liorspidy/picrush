@@ -170,39 +170,43 @@ const ImageOverlay = ({
     }
   };
   
-  const shareHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+  const shareHandler = async () => {
     if (!currentPicture) return;
   
-    try {
-      setIsLoading(true);
+    setIsLoading(true);
   
-      // Fetch image and create file
+    try {
       const response = await fetch(currentPicture.src);
       if (!response.ok) throw new Error("Failed to fetch image");
-  
       const blob = await response.blob();
       const file = new File([blob], 'picrush-photo.jpg', { type: blob.type });
   
-      // Try native file sharing
+      // ✅ Android native file sharing
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
+          title: 'Picrush Wedding Photo',
           files: [file],
         });
-      } else {
-        throw new Error("Native share not supported");
       }
-    } catch (error) {
-      console.warn("Native share failed, using WhatsApp fallback:", error);
-  
-      try {
-        const shortUrls = await shortenUrls([currentPicture.src]);
-        const message = `Here’s a memory from the wedding, shared with you via Picrush 💕\n\n${shortUrls[0]}`;
+
+      // ✅ iOS fallback using title + text + url
+      else if (navigator.share) {
+        const [shortUrl] = await shortenUrls([currentPicture.src]);
+        await navigator.share({
+          title: 'Picrush Wedding Photo',
+          url: shortUrl,
+        });
+      }
+      
+      // ❌ Fallback for older browsers — use WhatsApp link
+      else {
+        const [shortUrl] = await shortenUrls([currentPicture.src]);
+        const message = `Here’s a memory from the wedding, shared with you via Picrush 💕\n\n${shortUrl}`;
         const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
         window.open(whatsappURL, "_blank");
-      } catch (fallbackError) {
-        console.error("Fallback to WhatsApp failed:", fallbackError);
       }
+    } catch (error) {
+      console.error("Sharing failed:", error);
     } finally {
       setIsLoading(false);
     }

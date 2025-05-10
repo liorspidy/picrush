@@ -33,7 +33,6 @@ const GalleryBottomActions = ({
     setIsLoading(true);
   
     try {
-      // Step 1: Try native file sharing
       const files: File[] = [];
   
       for (const image of pickedImages) {
@@ -44,27 +43,33 @@ const GalleryBottomActions = ({
         files.push(file);
       }
   
-      // Step 2: Check for native support
+      // ✅ Android native file sharing
       if (navigator.canShare && navigator.canShare({ files })) {
         await navigator.share({
+          title: 'Picrush Wedding Photos',
           files,
         });
-      } else {
-        throw new Error("Native share not supported");
       }
-  
-    } catch (error) {
-      console.warn("Native share failed or not supported, using WhatsApp fallback:", error);
-  
-      try {
-        const urls = pickedImages.map(img => img.src);
-        const shortUrls = await shortenUrls(urls);
+
+      // ✅ iOS & partial browsers — fallback to share text + URL
+      else if (navigator.share) {
+        const shortUrls = await shortenUrls(pickedImages.map(img => img.src));
+        await navigator.share({
+          title: 'Picrush Wedding Photos',
+          text: shortUrls.join("\n"),
+        });
+      }
+      
+      // ❌ Old browser — fallback to WhatsApp
+      else {
+        const shortUrls = await shortenUrls(pickedImages.map(img => img.src));
         const message = `Here are my photos from the wedding, shared with you via Picrush 💕\n\n${shortUrls.join("\n")}`;
         const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
         window.open(whatsappURL, "_blank");
-      } catch (linkError) {
-        console.error("Fallback to WhatsApp also failed:", linkError);
       }
+  
+    } catch (error) {
+      console.error("Sharing failed:", error);
     } finally {
       setIsLoading(false);
     }
