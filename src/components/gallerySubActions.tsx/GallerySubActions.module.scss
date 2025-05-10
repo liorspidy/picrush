@@ -2,7 +2,8 @@
 .subActions {
     display: flex;
     gap: 16px;
-    justify-content: center;
+    justify-content: space-between;
+    padding-inline: 12px;
     align-items: center;
     margin-block: 4px 12px;
     margin-inline: auto;
@@ -17,6 +18,7 @@
         background-color: transparent;
         cursor: pointer;
         border: none;
+        text-decoration: none;
 
         .text {
             font-size: 18px;
@@ -24,8 +26,8 @@
         }
 
         .sortMethod {
-            width: 30px;
-            height: 30px;
+            width: 24px;
+            height: 24px;
             padding: 0;
 
             .icon {
@@ -48,6 +50,7 @@
         cursor: pointer;
         border: none;
         font-size: 18px;
+        text-decoration: none;
 
         .text {
             margin-block: 0;

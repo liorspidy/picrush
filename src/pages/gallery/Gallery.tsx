@@ -149,7 +149,10 @@ const Gallery = () => {
       )}
 
       <GalleryHeaderActions 
+        isPicking={isPicking}
         setIsPicking={setIsPicking}
+        deselectAllHandler={deselectAllHandler}
+        filteredImages={filteredImages}
       />
 
       <div className={classes.textWrapper}>

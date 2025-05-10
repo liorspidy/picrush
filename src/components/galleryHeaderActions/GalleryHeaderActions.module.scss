@@ -6,7 +6,7 @@
 
     .btn {
         font-family: "Poppins", sans-serif;
-        font-size: 20px;
+        font-size: 18px;
         background-color: white;
         border: none;
         border-radius: 12px;
@@ -17,7 +17,13 @@
         max-width: 50%;
         margin-inline-end: auto;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-        padding: 4px 12px;
+        padding: 0px 12px;
+        color: #1C274C;
+        text-decoration: none;
+
+        &.disabled {
+            display: none;
+        }
     }
 
     .roundBtn {
@@ -54,5 +60,15 @@
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             }
         }
+    }
+}
+
+@keyframes showBtn { 
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
     }
 }
