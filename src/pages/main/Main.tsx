@@ -1,11 +1,13 @@
 import classes from './Main.module.scss';
 import Actions from '../../components/actions/Actions';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type SetStateAction } from 'react';
 import Header from '../../components/header/Header';
 import Loader from '@/components/loader/Loader';
+import InfoPopup from '@/components/infoPopup/InfoPopup';
 import { useFirebaseContext } from '@/hooks/useFirebase';
 
 const Main = () => {
+    const [isInfoPopupOpen, setIsInfoPopupOpen] = useState<boolean>(false);
     const { isLoading, bgImages } = useFirebaseContext();
     const [currentImage , setCurrentImage] = useState<string>(bgImages[0]);
 
@@ -23,9 +25,15 @@ const Main = () => {
 
     return (
         <>
-            <Header />
+            <Header setIsInfoPopupOpen={setIsInfoPopupOpen}/>
             <main className={classes.main}>
                 {isLoading && <Loader />}
+
+                {isInfoPopupOpen && 
+                    <InfoPopup 
+                    setIsPopupOpen={setIsInfoPopupOpen}
+                    />
+                }
                 <div className={classes.bgImageWrapper} style={{ '--bgImage': `url(${currentImage})` } as React.CSSProperties}>
                     <img className={classes.mainImage} src={currentImage} alt='background image' />
                 </div>

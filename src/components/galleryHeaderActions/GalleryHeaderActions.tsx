@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import classes from './GalleryHeaderActions.module.scss';
-import arrowRight from '@/assets/icons/arrow-right.svg';
+import arrowRight from '@/assets/icons/undo.svg';
 import refreshIcon from '@/assets/icons/refresh.svg';
 import type { IPic } from '@/interfaces/pic.interface';
 
