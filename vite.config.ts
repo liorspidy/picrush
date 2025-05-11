@@ -22,7 +22,7 @@ export default defineConfig({
       ],
       manifest: {
         name: 'Picrush',
-        short_name: 'PR',
+        short_name: 'Picrush',
         description: 'Picrush - snap your moments',
         theme_color: '#ffffff',
         background_color: '#ffffff',
