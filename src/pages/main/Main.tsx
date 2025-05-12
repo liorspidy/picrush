@@ -18,6 +18,7 @@ const Main = () => {
             localStorage.setItem('ft', 'true');
         }
     },[])
+    
 
     return (
         <>
