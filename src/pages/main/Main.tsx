@@ -1,6 +1,6 @@
 import classes from './Main.module.scss';
 import Actions from '../../components/actions/Actions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../../components/header/Header';
 import Loader from '@/components/loader/Loader';
 import InfoPopup from '@/components/infoPopup/InfoPopup';
@@ -10,6 +10,14 @@ import BgImages from '@/components/bgImages/BgImages';
 const Main = () => {
     const [isInfoPopupOpen, setIsInfoPopupOpen] = useState<boolean>(false);
     const { isLoading } = useFirebaseContext();
+
+    useEffect(() => {
+        const firstTime = localStorage.getItem('ft');
+        if (!firstTime) {
+            setIsInfoPopupOpen(true);
+            localStorage.setItem('ft', 'true');
+        }
+    },[])
 
     return (
         <>
