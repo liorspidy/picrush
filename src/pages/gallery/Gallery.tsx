@@ -3,7 +3,7 @@ import classes from './Gallery.module.scss';
 import GalleryDialog from '@/components/galleryDialog/GalleryDialog';
 import Loader from '@/components/loader/Loader';
 import ImageOverlay from '@/components/imageOverlay/imageOverlay';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import checkmarkIcon from '@/assets/icons/checkmark.svg';
 import type { IPic } from '@/interfaces/pic.interface';
 import GalleryHeaderActions from '@/components/galleryHeaderActions/GalleryHeaderActions';
@@ -37,30 +37,29 @@ const Gallery = () => {
     pickImageHandler,
     removeImagesFromFirebase,
     isLoading,
-    setIsLoading,
-    userId
+    setIsLoading
   } = useGallery();
 
-  const closeRemovingPopup = () => {
+  const closeRemovingPopup = useCallback(() => {
     setIsPopupOpen(false);
     setIsRemoving(false);
-  };
+  },[setIsPopupOpen, setIsRemoving]);
 
-  const confirmRemoveAll = () => {
+  const confirmRemoveAll = useCallback(() => {
     removeImagesFromFirebase(pickedImages);
     closeRemovingPopup();
     setIsPicking(false);
     setPickedImages([]);
-  };
+  },[pickedImages, removeImagesFromFirebase, closeRemovingPopup, setIsPicking, setPickedImages]);
 
-  const cancelRemoveAll = () => {
+  const cancelRemoveAll = useCallback(() => {
     closeRemovingPopup();
-  };
+  },[closeRemovingPopup]);
 
-  const deselectAllHandler = () => {
+  const deselectAllHandler = useCallback(() => {
     setIsPicking(false);
     setPickedImages([]);
-  };
+  },[setIsPicking, setPickedImages]);
   
   // the images grid
   const imagesGrid = useMemo(() => {
@@ -133,7 +132,6 @@ const Gallery = () => {
       {currentPicture && (
         <ImageOverlay
           filteredImages={filteredImages}
-          userId={userId}
           currentPicture={currentPicture}
           setCurrentPicture={setCurrentPicture}
           currentPictureIndex={currentPictureIndex}
@@ -152,7 +150,7 @@ const Gallery = () => {
         isPicking={isPicking}
         setIsPicking={setIsPicking}
         deselectAllHandler={deselectAllHandler}
-        filteredImages={filteredImages}
+        filteredImagesLength={filteredImages.length}
       />
 
       <div className={classes.textWrapper}>

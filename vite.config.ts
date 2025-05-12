@@ -52,13 +52,23 @@ export default defineConfig({
       }
     })
   ],
+  // server: {
+  //   host: '192.168.1.191',
+  //   port: 3000,
+  //   https: {
+  //     key: fs.readFileSync('./192.168.1.191-key.pem'),
+  //     cert: fs.readFileSync('./192.168.1.191.pem'),
+  //   },
+  //   strictPort: true
+  // }
+
   server: {
-    host: '192.168.1.191',
-    port: 3000,
-    https: {
-      key: fs.readFileSync('./192.168.1.191-key.pem'),
-      cert: fs.readFileSync('./192.168.1.191.pem'),
-    },
-    strictPort: true
-  }
+  host: true,
+  port: 3000,
+  https: {
+    key: fs.readFileSync('./192.168.1.191-key.pem'),
+    cert: fs.readFileSync('./192.168.1.191.pem'),
+  },
+  strictPort: true
+}
 })

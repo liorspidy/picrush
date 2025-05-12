@@ -2,8 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Main from './pages/main/Main';
 import Gallery from './pages/gallery/Gallery';
-import { Toaster } from 'react-hot-toast';
-import { useEffect } from 'react';
+import { Toaster, type DefaultToastOptions } from 'react-hot-toast';
+import { useEffect, useMemo } from 'react';
 import { useFirebaseContext } from './hooks/useFirebase';
 
 function App() {
@@ -28,19 +28,21 @@ function App() {
     }
   },[])
 
+  const toastOptions: DefaultToastOptions = useMemo(() => ({
+    duration: 2500,
+    position: 'top-center',
+    style: {
+      fontFamily: 'sans-serif',
+      position: 'relative' as React.CSSProperties['position'],
+      top: '150px'
+    }
+  }), []);
+
   return (
     <>
       <Toaster 
       position="bottom-center" 
-      toastOptions={{ 
-        duration: 2500, 
-        position: 'top-center',
-        style: { 
-          fontFamily: 'sans-serif', 
-          position: 'relative',
-          top: '150px'
-        } 
-      }} 
+      toastOptions={toastOptions} 
       />
       <Routes>
       <Route path="/" element={<Main />} />

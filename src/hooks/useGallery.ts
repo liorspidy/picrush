@@ -125,7 +125,7 @@ const useGallery = () => {
     setPickedImages(prev => [...prev, img]);
   }, []);
 
-  const removeImagesFromFirebase = async (pictures: IPic[]) => {
+  const removeImagesFromFirebase = useCallback(async (pictures: IPic[]) => {
     setIsLoading(true);
     try {
       const tasks = pictures.map(async (pic) => {
@@ -156,7 +156,7 @@ const useGallery = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  },[db, filteredImages, setIsLoading, setVal, storage]);
 
   return {
     images,
@@ -185,7 +185,6 @@ const useGallery = () => {
     removeImagesFromFirebase,
     isLoading,
     setIsLoading,
-    userId,
     setFilteredImages
   };
 };

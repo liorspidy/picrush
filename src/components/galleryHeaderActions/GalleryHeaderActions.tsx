@@ -2,16 +2,15 @@ import { Link } from 'react-router-dom';
 import classes from './GalleryHeaderActions.module.scss';
 import arrowRight from '@/assets/icons/undo.svg';
 import refreshIcon from '@/assets/icons/refresh.svg';
-import type { IPic } from '@/interfaces/pic.interface';
 
 interface GalleryHeaderActionsProps {
   isPicking: boolean;
   setIsPicking:  React.Dispatch<React.SetStateAction<boolean>>; 
   deselectAllHandler: () => void;
-  filteredImages: IPic[];
+  filteredImagesLength: number;
 }
 
-const GalleryHeaderActions = ({isPicking, setIsPicking, filteredImages, deselectAllHandler}: GalleryHeaderActionsProps) => {
+const GalleryHeaderActions = ({isPicking, setIsPicking, filteredImagesLength, deselectAllHandler}: GalleryHeaderActionsProps) => {
   // refreshing method
   const refreshHandler = () => {
     window.location.reload();
@@ -29,9 +28,9 @@ const GalleryHeaderActions = ({isPicking, setIsPicking, filteredImages, deselect
     <div className={classes.galleryHeaderActions}>
       <button
         type="button"
-        className={`${classes.btn} ${classes.select} ${filteredImages.length === 0 ? classes.disabled : null}`}
+        className={`${classes.btn} ${classes.select} ${filteredImagesLength === 0 ? classes.disabled : null}`}
         onClick={selectHandler}
-        disabled={filteredImages.length === 0}
+        disabled={filteredImagesLength === 0}
       >
         Select
       </button>

@@ -1,27 +1,15 @@
 import classes from './Main.module.scss';
 import Actions from '../../components/actions/Actions';
-import { useEffect, useState, type SetStateAction } from 'react';
+import { useState } from 'react';
 import Header from '../../components/header/Header';
 import Loader from '@/components/loader/Loader';
 import InfoPopup from '@/components/infoPopup/InfoPopup';
 import { useFirebaseContext } from '@/hooks/useFirebase';
+import BgImages from '@/components/bgImages/BgImages';
 
 const Main = () => {
     const [isInfoPopupOpen, setIsInfoPopupOpen] = useState<boolean>(false);
-    const { isLoading, bgImages } = useFirebaseContext();
-    const [currentImage , setCurrentImage] = useState<string>(bgImages[0]);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentImage((prevImage: string) => {
-                const currentIndex = bgImages.indexOf(prevImage);
-                const nextIndex = (currentIndex + 1) % bgImages.length;
-                return bgImages[nextIndex];
-            });
-        }, 5000); // Change image every 5 seconds
-
-        return () => clearInterval(interval);
-    }, [bgImages]);
+    const { isLoading } = useFirebaseContext();
 
     return (
         <>
@@ -34,9 +22,8 @@ const Main = () => {
                     setIsPopupOpen={setIsInfoPopupOpen}
                     />
                 }
-                <div className={classes.bgImageWrapper} style={{ '--bgImage': `url(${currentImage})` } as React.CSSProperties}>
-                    <img className={classes.mainImage} src={currentImage} alt='background image' />
-                </div>
+
+                <BgImages />
 
                     <div className={classes.overlay}>
                         <div className={classes.textWrapper}>
