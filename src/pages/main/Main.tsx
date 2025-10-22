@@ -38,7 +38,7 @@ const Main = () => {
                         <div className={classes.textWrapper}>
                             <div className={classes.content}>
                                 <h1 className={classes.mainTitle}>{`Netanela \u00A0&\u00A0 Lior`}</h1>
-                                <p className={classes.mainDate}>02/02/2026</p>
+                                <p className={classes.mainDate}>27/01/2026</p>
                             </div>
                         </div>
                         <Actions />
