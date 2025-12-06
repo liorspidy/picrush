@@ -41,7 +41,7 @@ const InfoPopup = ({ setIsPopupOpen }: InfoPopupProps) => {
                 >
                     <h2 className={classes.title}>
                         {isHebrew ? (
-                            <>הגעתם ל<strong>PICRUSH</strong> 🎉</>
+                            <>ברוכים הבאים ל<strong>PICRUSH</strong> 🎉</>
                         ) : (
                             <>Welcome to <strong>PICRUSH</strong> 🎉</>
                         )}
@@ -66,7 +66,7 @@ const InfoPopup = ({ setIsPopupOpen }: InfoPopupProps) => {
 
                         <li className={classes.li}>
                             {isHebrew ? (
-                                <>☁️ התמונות יעלו באוויר — נשארים פה עד שזה נגמר 😉</>
+                                <>☁️ התמונות יועלו למאגר המשותף — מחכים עד סוף הטעינה 😉</>
                             ) : (
                                 <>☁️ Your photos will start uploading — stay on the page 'til it's done</>
                             )}
@@ -74,7 +74,7 @@ const InfoPopup = ({ setIsPopupOpen }: InfoPopupProps) => {
 
                         <li className={classes.li}>
                             {isHebrew ? (
-                                <>👀 נכנסים ל<strong>גלריה</strong> לראות מה כולם צילמו</>
+                                <>👀 נכנסים ל<strong>גלריה</strong> כדי לראות מה כולם צילמו</>
                             ) : (
                                 <>👀 Tap the <strong>gallery</strong> button to browse the photo stream</>
                             )}
@@ -82,7 +82,7 @@ const InfoPopup = ({ setIsPopupOpen }: InfoPopupProps) => {
 
                         <li className={classes.li}>
                             {isHebrew ? (
-                                <>⏱️ מסדרים לפי זמן או מסננים — רק שלי או של כולם</>
+                                <>⏱️ מסדרים לפי זמן, או מסננים — רק שלי או של כולם</>
                             ) : (
                                 <>⏱️ Sort by time or filter to see just yours or everyone's shots</>
                             )}
@@ -90,7 +90,7 @@ const InfoPopup = ({ setIsPopupOpen }: InfoPopupProps) => {
 
                         <li className={classes.li}>
                             {isHebrew ? (
-                                <>🖐️ לחיצה ארוכה בוחרת תמונה — או <strong>בחר</strong> לכמה ביחד</>
+                                <>🖐️ לחיצה ארוכה בוחרת תמונה — או לחצו על <strong>בחר</strong> כדי לבחור כמה ביחד</>
                             ) : (
                                 <>🖐️ Tap and hold a photo to select it — or hit <strong>select</strong> to pick multiples</>
                             )}
@@ -106,7 +106,7 @@ const InfoPopup = ({ setIsPopupOpen }: InfoPopupProps) => {
 
                         <li className={classes.li}>
                             {isHebrew ? (
-                                <>🔗 משתפים את השוטים הכי טובים שלך ב-WhatsApp</>
+                                <>🔗 משתפים את התמונות הכי טובות שלך ב-WhatsApp</>
                             ) : (
                                 <>🔗 Tap the <strong>share</strong> button to send your best shots via WhatsApp</>
                             )}

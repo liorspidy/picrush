@@ -8,7 +8,6 @@
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    gap: 10px;
     position: absolute;
 
     .logoWrapper {
@@ -17,48 +16,94 @@
             letter-spacing: 4px;
             font-weight: 400;
             line-height: 0;
+            margin-block-start: 20px;
         }
     }
 
-    .infoWrapper {
-        gap: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .menuContainer {
+        align-self: start;
+        margin-block-start: 8px;
+        margin-inline: 8px;
+        position: relative;
 
-        .infoBtn {
-            border: none;
+        &.hebrew {
+            align-self: end;
+        }
+
+        .menuBtn {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            width: 38px;
-            height: 38px;
-            padding: 2px;
-            background-color: rgb(177 177 177 / 49%);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-
+            appearance: none;
+            border: none;
+            background: none;
+            padding: 0;
             .icon {
                 width: 100%;
                 height: 100%;
                 object-fit: contain;
-                // filter: grayscale(1) brightness(0) invert(1) ;
             }
         }
-    }
 
-    .languageButton {
-        border: none;
-        border-radius: 50%;
-        width: 38px;
-        height: 38px;
-        padding: 4px;
-        background-color: rgb(177 177 177 / 49%);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-        position: relative;
-
-        .icon {
+        .menuDropdown {
+            background-color: white;
+            border-radius: 12px;
             position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
+            top: 52px;
+            left: 8px;
+            right: auto;
+            opacity: 0;
+            animation: showDropdown 0.2s ease-in forwards;
+            z-index: 999;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            direction: ltr;
+            
+            &.hebrew {
+                right: 8px;
+                left: auto;
+                direction: rtl;
+            }
+
+            .listItems {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+
+                .listItem {
+                    list-style: none;
+                    &:not(:last-child) {
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                    }
+
+                    .menuItemButton {
+                        border: none;
+                        background-color: transparent;
+                        text-align: start;
+                        padding: 4px 12px;
+                        height: 46px;
+                        min-width: 180px;
+
+                        .text {
+                            font-weight: 600;
+                            font-size: 18px;
+                            white-space: nowrap;
+                            margin: 0;
+                            display: inline-block;
+                            vertical-align: middle;
+                        }
+
+                        .icon {
+                            margin-inline-start: 8px;
+                            width: 28px;
+                            height: 28px;
+                            border-radius: 50%;
+                            object-fit: contain;
+                            display: inline-block;
+                            vertical-align: middle;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -95,5 +140,11 @@
                 background-color: #1c274c;
             }
         }
+    }
+}
+
+@keyframes showDropdown {
+    to {
+        opacity: 1;
     }
 }
