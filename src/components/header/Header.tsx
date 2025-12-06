@@ -21,31 +21,35 @@ const Header = ({ setIsInfoPopupOpen }: HeaderProps) => {
         <header className={classes.header}>
             <div className={classes.logoWrapper}>
                 <p className={classes.logo}>PICRUSH</p>
+            </div>
 
-                <div className={classes.infoWrapper}>
-                    <button
-                        type="button"
-                        onClick={infoHandler}
-                        className={classes.infoBtn}
-                    >
-                        <img
-                            className={classes.icon}
-                            src={infoIcon}
-                            alt="info on app"
-                        />
-                    </button>
+            <div className={classes.infoWrapper}>
+                <button
+                    type="button"
+                    onClick={infoHandler}
+                    className={classes.infoBtn}
+                >
+                    <img
+                        className={classes.icon}
+                        src={infoIcon}
+                        alt="info on app"
+                    />
+                </button>
 
-                    <button
-                        type="button"
-                        className={classes.languageButton}
-                        onClick={setLanguageHandler.bind(
-                            null,
-                            language === "HE" ? "EN" : "HE"
-                        )}
-                    >
-                        <img className={classes.icon} src={language === "HE" ? israelIcon : useIcon} alt="flag" />
-                    </button>
-                </div>
+                <button
+                    type="button"
+                    className={classes.languageButton}
+                    onClick={setLanguageHandler.bind(
+                        null,
+                        language === "HE" ? "EN" : "HE"
+                    )}
+                >
+                    <img
+                        className={classes.icon}
+                        src={language === "HE" ? israelIcon : useIcon}
+                        alt="flag"
+                    />
+                </button>
             </div>
 
             <label className={classes.barLabel} htmlFor="bar">
