@@ -5,28 +5,31 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.tsx";
 import { FirebaseProvider } from "./firebase/firebase.context.tsx";
-import { registerSW } from 'virtual:pwa-register'
+import { registerSW } from "virtual:pwa-register";
+import { AppProvider } from "./store/AppProvider.tsx";
 
 // scan({
 //   enabled: true
 // })
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <FirebaseProvider>
-        <App />
-      </FirebaseProvider>
-    </BrowserRouter>
-  </StrictMode>
+    <StrictMode>
+        <BrowserRouter>
+            <FirebaseProvider>
+                <AppProvider>
+                    <App />
+                </AppProvider>
+            </FirebaseProvider>
+        </BrowserRouter>
+    </StrictMode>
 );
 
 // Register PWA service worker
 registerSW({
-  onOfflineReady() {
-    // console.log('✅ App ready to work offline');
-  },
-  onNeedRefresh() {
-    // console.log('🔁 New version available');
-  },
+    onOfflineReady() {
+        // console.log('✅ App ready to work offline');
+    },
+    onNeedRefresh() {
+        // console.log('🔁 New version available');
+    },
 });

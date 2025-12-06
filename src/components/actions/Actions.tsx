@@ -10,17 +10,20 @@ import { useFirebaseContext } from '@/hooks/useFirebase';
 import toast from 'react-hot-toast';
 import imageCompression from 'browser-image-compression';
 import type { IPic } from '@/interfaces/pic.interface';
+import { useAppContext } from '@/store/useAppContext';
 
 const Actions = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { db, storage, setIsLoading, userId, val, setVal, maxVal} = useFirebaseContext();
+  const {language} = useAppContext();
+  const isHebrew = language === "HE";
 
   const btnHandler = (ref: React.RefObject<HTMLInputElement | null>) => {
     if(val !== maxVal){
       ref.current?.click();
     } else {
-      toast.error('No Uploades Left')
+      toast.error(isHebrew ? "לא נותרו העלאות" : 'No Uploades Left')
     }
   }
 
@@ -83,9 +86,9 @@ const Actions = () => {
       localStorage.setItem("val", currentVal.toString());
       setVal(currentVal);
   
-      toast.success("Got it! Added to the gallery.");
+      toast.success(isHebrew ? "הצלחנו! התמונה עלתה לגלריה" :"Got it! Added to the gallery.");
     } catch (err) {
-      toast.error("Error - please try again later");
+      toast.error(isHebrew ? "קרתה שגיאה - נסו שוב מאוחר יותר" : "Error - please try again later");
       console.error("Upload failed:", err);
     } finally {
       setIsLoading(false);

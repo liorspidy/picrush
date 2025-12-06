@@ -5,7 +5,7 @@
     z-index: 5;
 
     .popup {
-        padding: 20px;
+        padding: 16px;
         background-color: white;
         display: flex;
         justify-content: flex-start;
@@ -32,7 +32,9 @@
         }
 
         .content {
-            // flex: 1;
+            &.hebrew {
+                direction: rtl;
+            }
             .title {
                 font-weight: 700;
                 font-size: 24px;
@@ -48,7 +50,7 @@
                 list-style-type: circle;
 
                 .li {
-                    font-size: 20px;
+                    font-size: 18px;
                 }
             }
 
@@ -62,7 +64,7 @@
 
         .btn {
             font-family: 'Poppins', sans-serif;
-            font-size: 22px;
+            font-size: 18px;
             background-color: #1C274C;
             color: white;
             border: none;
@@ -76,6 +78,10 @@
             max-width: 50%;
             text-decoration: none;
             width: 100%;
+
+            &.hebrew {
+                direction: rtl;
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import classes from './GalleryHeaderActions.module.scss';
 import arrowRight from '@/assets/icons/undo.svg';
 import refreshIcon from '@/assets/icons/refresh.svg';
+import { useAppContext } from '@/store/useAppContext';
 
 interface GalleryHeaderActionsProps {
   isPicking: boolean;
@@ -11,6 +12,9 @@ interface GalleryHeaderActionsProps {
 }
 
 const GalleryHeaderActions = ({isPicking, setIsPicking, filteredImagesLength, deselectAllHandler}: GalleryHeaderActionsProps) => {
+  const {language} = useAppContext();
+  const isHebrew = language === "HE";
+
   // refreshing method
   const refreshHandler = () => {
     window.location.reload();
@@ -32,7 +36,7 @@ const GalleryHeaderActions = ({isPicking, setIsPicking, filteredImagesLength, de
         onClick={selectHandler}
         disabled={filteredImagesLength === 0}
       >
-        Select
+        {isHebrew ? "בחירה" : "Select"}
       </button>
 
       <button

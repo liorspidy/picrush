@@ -8,6 +8,10 @@
     margin-block: 4px 12px;
     margin-inline: auto;
 
+    &.hebrew {
+        direction: rtl;
+    }
+
     .sortBy {
         padding: 0 6px;
         display: flex;

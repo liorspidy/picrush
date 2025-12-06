@@ -7,6 +7,7 @@ import Loader from "../loader/Loader";
 import GalleryDialog from "../galleryDialog/GalleryDialog";
 import { useCallback, useRef } from "react";
 import ImageOverlayActions from "../imageOverlayActions/ImageOverlayActions";
+import { useAppContext } from "@/store/useAppContext";
 
 interface ImageOverlayProps {
   filteredImages: IPic[];
@@ -38,6 +39,9 @@ const ImageOverlay = ({
   removeImagesFromFirebase
 }: ImageOverlayProps) => {  
   const { isLoading , setIsLoading} = useFirebaseContext();
+  const {language} = useAppContext();
+
+  const isHebrew = language === "HE";
   const touchStartX = useRef<number>(0);
 
   const closePictureHandler = useCallback(() => {
@@ -160,7 +164,7 @@ const ImageOverlay = ({
                 />
               </div>
               <p className={classes.info}>
-                Swipe right or left to see more
+                {isHebrew ? "החלק ימינה או שמאלה כדי לראות עוד" : "Swipe right or left to see more"}
               </p>
             </div>
           )}
@@ -209,7 +213,7 @@ const ImageOverlay = ({
       </div>
 
       {isPopupOpen && <GalleryDialog 
-        message="Are you sure you want to delete this image?" 
+        message={isHebrew ? "האם אתה בטוח שברצונך למחוק את התמונה?" :"Are you sure you want to delete this image?"} 
         confirmAction={acceptRemoving}
         cancelAction={declineRemoving}
         setIsPopupOpen={setIsPopupOpen}

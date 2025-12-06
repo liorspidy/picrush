@@ -5,7 +5,14 @@
   gap: 16px;
   position: absolute;
   left: 12px;
+  right: auto;
   top: 18px;
+
+  &.hebrew {
+    left: auto;
+    right: 12px;
+    flex-direction: row-reverse;
+  }
 
   .btn {
     padding: 5px;

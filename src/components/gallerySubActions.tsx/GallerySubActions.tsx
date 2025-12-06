@@ -1,6 +1,7 @@
 import classes from "./GallerySubActions.module.scss";
 import arrowUp from "@/assets/icons/arrow.svg";
 import arrowDown from "@/assets/icons/arrow-down.svg";
+import { useAppContext } from "@/store/useAppContext";
 
 interface GallerySubActionsProps {
   sortingMethod: number;
@@ -17,6 +18,9 @@ const GallerySubActions = ({
   isUserBased,
   deselectAllHandler,
 }: GallerySubActionsProps) => {
+  const {language} = useAppContext();
+  const isHebrew = language === "HE";
+
   // switchs the sorting method
   const switchSortingHandler = () => {
     setSortingMethod((prev) => (prev === 1 ? 0 : 1));
@@ -30,13 +34,13 @@ const GallerySubActions = ({
   };
 
   return (
-    <div className={classes.subActions}>
+    <div className={`${classes.subActions} ${isHebrew ? classes.hebrew : null}`}>
       <button
         type="button"
         className={classes.sortBy}
         onClick={switchSortingHandler}
       >
-        <p className={classes.text}>sort by:</p>
+        <p className={classes.text}>{isHebrew ? "מיין לפי:" : "Sort by:"}</p>
         <div className={classes.sortMethod}>
           <img
             className={classes.icon}
@@ -53,9 +57,9 @@ const GallerySubActions = ({
         className={classes.showMe}
         onClick={switchShowMeHandler}
       >
-        <p className={classes.text}>show me:</p>
+        <p className={classes.text}>{isHebrew ? "הצג:" : "show me:"}</p>
         <span className={classes.showMethod}>
-          {isUserBased ? "only me" : "all"}
+          {isUserBased ? isHebrew ? "רק שלי" : "only me" : isHebrew ?  "של כולם" : "all"}
         </span>
       </button>
     </div>

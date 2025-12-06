@@ -6,9 +6,12 @@
     text-align: center;
     z-index: 1;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: absolute;
 
-    .logoWrapper { 
-        position: relative;
+    .logoWrapper {
         .logo {
             font-size: clamp(42px, 12dvw, 48px);
             letter-spacing: 4px;
@@ -17,20 +20,20 @@
         }
 
         .infoWrapper {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translate(-10px,-50%);
-    
+            gap: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
             .infoBtn {
                 border: none;
                 border-radius: 50%;
-                width: 34px;
-                height: 34px;
-                padding: 4px;
+                width: 38px;
+                height: 38px;
+                padding: 2px;
                 background-color: rgb(177 177 177 / 49%);
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    
+
                 .icon {
                     width: 100%;
                     height: 100%;
@@ -39,12 +42,30 @@
                 }
             }
         }
+
+        .languageButton {
+            border: none;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            padding: 4px;
+            background-color: rgb(177 177 177 / 49%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            position: relative;
+
+            .icon {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+            }
+        }
     }
 
     .barLabel {
         font-size: 18px;
     }
-    
+
     .imagesLeft {
         margin-block-start: 0px;
         display: flex;

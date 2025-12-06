@@ -5,6 +5,7 @@ import shareIcon from "@/assets/icons/share.svg";
 import downloadImg from "@/assets/icons/download.svg";
 import type { IPic } from "@/interfaces/pic.interface";
 import { shortenUrls } from "@/tools/shortenUrls";
+import { useAppContext } from "@/store/useAppContext";
 
 interface GalleryBottomActionsProps {
   allowRemoving: boolean;
@@ -23,6 +24,9 @@ const GalleryBottomActions = ({
   pickedImages,
   setIsLoading,
 }: GalleryBottomActionsProps) => {
+  const {language} = useAppContext();
+  const isHebrew = language === "HE";
+
   const removeAllHandler = () => {
     setIsPopupOpen(true);
     setIsRemoving(true);
@@ -46,7 +50,7 @@ const GalleryBottomActions = ({
       // ✅ Android native file sharing
       if (navigator.canShare && navigator.canShare({ files })) {
         await navigator.share({
-          title: 'Picrush Wedding Photos',
+          title: isHebrew ? 'תמונות החתונה של נתנאלה וליאור' : "Netanela & Lior's Wedding Photos",
           files,
         });
       }
@@ -55,7 +59,7 @@ const GalleryBottomActions = ({
       else if (navigator.share) {
         const shortUrls = await shortenUrls(pickedImages.map(img => img.src));
         await navigator.share({
-          title: 'Picrush Wedding Photos',
+          title: isHebrew ? 'תמונות החתונה של נתנאלה וליאור' : "Netanela & Lior's Wedding Photos",
           text: shortUrls.join("\n"),
         });
       }
@@ -63,7 +67,9 @@ const GalleryBottomActions = ({
       // ❌ Old browser — fallback to WhatsApp
       else {
         const shortUrls = await shortenUrls(pickedImages.map(img => img.src));
-        const message = `Here are my photos from the wedding, shared with you via Picrush 💕\n\n${shortUrls.join("\n")}`;
+        const message = isHebrew 
+          ? `הנה התמונות שלי מהחתונה, שיתוף דרך Picrush 💕\n\n${shortUrls.join("\n")}`
+          : `Here are my photos from the wedding, shared with you via Picrush 💕\n\n${shortUrls.join("\n")}`;
         const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
         window.open(whatsappURL, "_blank");
       }
@@ -147,7 +153,7 @@ const GalleryBottomActions = ({
         className={`${classes.btn} ${classes.deselectAll}`}
         onClick={deselectAllHandler}
       >
-        Cancel
+        {isHebrew ? "ביטול" : "Cancel"}
       </button>
     </div>
   );

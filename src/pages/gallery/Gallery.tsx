@@ -9,6 +9,7 @@ import type { IPic } from '@/interfaces/pic.interface';
 import GalleryHeaderActions from '@/components/galleryHeaderActions/GalleryHeaderActions';
 import GallerySubActions from '@/components/gallerySubActions.tsx/GallerySubActions';
 import GalleryBottomActions from '@/components/galleryBottomActions/GalleryBottomActions';
+import { useAppContext } from '@/store/useAppContext';
 
 const Gallery = () => {
   const LONG_PRESS_DURATION = 500;
@@ -39,6 +40,8 @@ const Gallery = () => {
     isLoading,
     setIsLoading
   } = useGallery();
+  const { language } = useAppContext();
+  const isHebrew = language === "HE";
 
   const closeRemovingPopup = useCallback(() => {
     setIsPopupOpen(false);
@@ -123,7 +126,7 @@ const Gallery = () => {
       {isLoading && <Loader />}
       {isPopupOpen && pickedImages.length > 0 && 
         <GalleryDialog 
-          message={"Are you sure you want to delete all these images?"} 
+          message={isHebrew ? "האם אתה בטוח שתרצה למחוק את כל התמונות שבחרת?" : "Are you sure you want to delete all these images?"} 
           setIsPopupOpen={setIsPopupOpen} 
           confirmAction={confirmRemoveAll} 
           cancelAction={cancelRemoveAll}      
@@ -173,8 +176,8 @@ const Gallery = () => {
       )}
 
       {filteredImages.length == 0 && (
-        <div className={classes.noData}>
-          <p>No Images Here Yet...</p>
+        <div className={`${classes.noData} ${isHebrew ? classes.hebrew : null}`}>
+          <p>{isHebrew ? "עדין אין כאן תמונות..." : "No Images Here Yet..."}</p>
         </div>
       )}
 

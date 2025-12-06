@@ -7,6 +7,7 @@ import { shortenUrls } from "@/tools/shortenUrls";
 import { useCallback } from "react";
 import type { IPic } from "@/interfaces/pic.interface";
 import { useFirebaseContext } from "@/hooks/useFirebase";
+import { useAppContext } from "@/store/useAppContext";
 
 interface ImageOverlayActionsProps {
     currentPicture: IPic | null;
@@ -24,6 +25,8 @@ const ImageOverlayActions = ({
     setIsRemoving,
 }: ImageOverlayActionsProps) => {
     const { setIsLoading, userId} = useFirebaseContext();
+    const {language} = useAppContext();
+    const isHebrew = language === "HE";
     
     const downloadHandler = useCallback(
         async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -115,7 +118,7 @@ const ImageOverlayActions = ({
     },[isPopupOpen, setIsPopupOpen, setIsRemoving])
   
   return (
-    <div className={classes.actions}>
+    <div className={`${classes.actions} ${isHebrew ? classes.hebrew : null}`}>
       <button
         type="button"
         className={classes.btn}
