@@ -33,57 +33,6 @@
         gap: 4px;
         padding-inline: 4px;
         padding-bottom: 40px;
-
-        &.picking {
-            .isPicked {
-                display: block;
-                position: absolute;
-                left: 10px;
-                top: 10px;
-                border-radius: 6px;
-                width: 26px;
-                height: 26px;
-                background-color: rgba(57, 57, 57, 0.678);
-                border: 2px solid white;
-            }
-        }
-        
-        .imageBtnWrapper {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            &.picked {
-                .isPicked {
-                    background-color: white;
-                    display: grid;
-                    place-items: center;
-
-                    .checkmark {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: contain;
-                    }
-                }
-            }
-
-            .imageBtn {
-                cursor: pointer;
-                border-radius: 8px;
-                overflow: hidden;
-                background: transparent;
-                border: none;
-                padding: 0;
-                width: 100%;
-                height: 100%;
-                aspect-ratio: 1 / 1;
-    
-                .image {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-            }
-        }
     }
 
     .noData {
@@ -103,13 +52,13 @@
 @media screen and (min-width: 768px) {
     .gallery {
         .imagesGrid {
-            grid-template-columns: repeat(6,1fr);
+            grid-template-columns: repeat(6, 1fr);
             padding-bottom: 0;
-        }    
+        }
     }
 }
 
-@keyframes showBtn { 
+@keyframes showBtn {
     0% {
         opacity: 0;
     }
